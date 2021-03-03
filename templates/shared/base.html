@@ -1,12 +1,13 @@
 {% load bootstrap5 %}
+{% load static %}
 <!DOCTYPE html>
 <html lang='ja'>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="">
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% block head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
