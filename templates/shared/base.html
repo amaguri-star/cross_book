@@ -1,0 +1,19 @@
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang='ja'>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% block head %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="content">
+{% include 'shared/navbar.html' %}
+{% block content %}
+{% endblock %}
+</div>
+</body>
+</html>
