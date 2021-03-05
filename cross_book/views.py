@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import AddressForm
+from .forms import AddressForm, EditUserProfile
+from .models import User
 
 
 # Create your views here.
@@ -8,13 +9,35 @@ def home(request):
     return render(request, 'cross_book/home.html', context)
 
 
+def my_page(request, pk):
+    user = User.objects.get(id=pk)
+    context = {'user': user}
+    return render(request, 'cross_book/user_profile.html', context)
+
+
+def edit_user_profile(request, pk):
+    if request.user == User.objects.get(id=pk):
+        user = request.user
+        form = EditUserProfile(instance=user)
+        if request.method == 'POST':
+            form = EditUserProfile(request.POST, request.FILES, instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('my_page', user.id)
+
+        context = {'form': form}
+        return render(request, 'cross_book/edit_user_profile.html', context)
+    else:
+        return redirect('home')
+
+
 def address_page(request):
+    user = request.user
+    form = AddressForm(instance=request.user.address)
     if request.method == 'POST':
-        form = AddressForm(request.POST, instance=request.user.address)
+        form = AddressForm(request.POST, instance=user.address)
         if form.is_valid():
             form.save()
             return redirect('home')
-    else:
-        form = AddressForm(instance=request.user.address)
-        context = {'form': form}
-        return render(request, 'cross_book/address_form.html', context)
+    context = {'form': form}
+    return render(request, 'cross_book/address_form.html', context)

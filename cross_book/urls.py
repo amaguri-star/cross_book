@@ -4,5 +4,7 @@ from cross_book import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('set_address', views.address_page, name='set_address'),
+    path('mypage/<int:pk>/', views.my_page, name='my_page'),
+    path('mypage/<int:pk>/edit/', views.edit_user_profile, name='edit_user_profile'),
+    path('set_address/', views.address_page, name='set_address'),
 ]

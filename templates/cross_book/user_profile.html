@@ -1,0 +1,10 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block title %}マイページ{% endblock %}
+{% block content %}
+    <div>
+    {{ user.username }}
+        <img src="{{ user.image.url }}" alt="">
+    {{ user.profile_text }}
+    </div>
+{% endblock %}

@@ -39,3 +39,8 @@ class AddressForm(forms.ModelForm):
             )
         }
 
+
+class EditUserProfile(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'image', 'profile_text')

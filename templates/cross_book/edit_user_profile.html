@@ -1,0 +1,12 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block title %}ユーザープロフィール編集{% endblock %}
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button type="submit">変更</button>
+    </form>
+{% endblock %}

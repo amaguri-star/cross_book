@@ -47,6 +47,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(_('username'), max_length=30, unique=True)
     email = models.EmailField(_('email address'), unique=True)
+    image = models.ImageField(default='/profile_pics/default.png', upload_to='profile_pics')
+    profile_text = models.TextField(verbose_name="プロフィール文", max_length=250, blank=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last_name'), max_length=150, blank=True)
     is_staff = models.BooleanField(
