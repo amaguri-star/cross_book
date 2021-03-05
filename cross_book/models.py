@@ -128,10 +128,10 @@ class Address(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    zip_code = models.CharField(verbose_name='郵便番号', max_length=8, blank=True)
-    address1 = models.IntegerField(verbose_name='都道府県', blank=True, choices=LOCATION)
-    address2 = models.CharField(verbose_name='市区町村番地', max_length=40, blank=True)
-    address3 = models.CharField(verbose_name='建物名', max_length=40, blank=True)
+    zip_code = models.CharField(verbose_name='郵便番号', max_length=8, blank=True, null=True)
+    address1 = models.IntegerField(verbose_name='都道府県', blank=True, null=True, choices=LOCATION)
+    address2 = models.CharField(verbose_name='市区町村番地', max_length=40, blank=True, null=True)
+    address3 = models.CharField(verbose_name='建物名', max_length=40, blank=True, null=True)
 
     def __str__(self):
         return f'{self.user.username}'
