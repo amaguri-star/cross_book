@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .forms import AddressForm, EditUserProfile
 from .models import User
 
@@ -23,6 +24,7 @@ def edit_user_profile(request, pk):
             form = EditUserProfile(request.POST, request.FILES, instance=user)
             if form.is_valid():
                 form.save()
+                messages.success(request, 'プロフィールを変更しました。')
                 return redirect('my_page', user.id)
 
         context = {'form': form}
@@ -38,6 +40,7 @@ def address_page(request):
         form = AddressForm(request.POST, instance=user.address)
         if form.is_valid():
             form.save()
+            messages.success(request, "配送先を変更しました。")
             return redirect('home')
     context = {'form': form}
     return render(request, 'cross_book/address_form.html', context)
