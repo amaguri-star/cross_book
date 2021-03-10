@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
+from django.template.defaultfilters import slugify
 
 
 # Create your models here.
@@ -76,8 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
-class Address(models.Model):
-    LOCATION = (
+LOCATION = (
         (0, "選択してください"),
         (1, "北海道"),
         (2, "青森県"),
@@ -129,6 +129,8 @@ class Address(models.Model):
         (48, "未定")
     )
 
+
+class Address(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     zip_code = models.CharField(verbose_name='郵便番号', max_length=8, blank=True, null=True)
     address1 = models.IntegerField(verbose_name='都道府県', blank=True, null=True, choices=LOCATION)
@@ -136,4 +138,35 @@ class Address(models.Model):
     address3 = models.CharField(verbose_name='建物名', max_length=40, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.user.username}'
+        return f'{self.user.username} の配送先情報'
+
+
+class Item(models.Model):
+
+    DAYS = (
+        (0, "選択してください"),
+        (1, "1~2日で発送"),
+        (2, "2~3日で発送"),
+        (3, "4~7日で発送")
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(verbose_name="商品名", max_length=30)
+    explanation = models.TextField(verbose_name="出品者からの一言", max_length=1000, blank=True)
+    shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0])
+    shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0])
+    at_created = models.DateTimeField(verbose_name="出品日", auto_created=True, null=True)
+
+    def __str__(self):
+        return f'{self.name} of {self.user.username}'
+
+
+def get_image_filename(instance, filename):
+    title = instance.item.name
+    slug = slugify(title)
+    return "post_images/%s-%s" % (slug, filename)
+
+
+class Image(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name="画像", upload_to=get_image_filename)

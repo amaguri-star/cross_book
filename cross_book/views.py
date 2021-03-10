@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .forms import AddressForm, EditUserProfile
-from .models import User
+from .forms import AddressForm, EditUserProfile, CreateItemForm, CreateFullItemForm
+from .models import User, Item, Image
 
 
 # Create your views here.
@@ -44,3 +44,30 @@ def address_page(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'cross_book/address_form.html', context)
+
+
+def sell_page(request):
+    if request.method == "POST":
+        form = CreateFullItemForm(request.POST, request.FILES)
+        files = request.FILES.getlist('images')
+        if form.is_valid():
+            user = request.user
+            item_name = form.cleaned_data['name']
+            explanation = form.cleaned_data['explanation']
+            shipping_area = form.cleaned_data['shipping_area']
+            shipping_day = form.cleaned_data['shipping_day']
+            item_obj = Item.objects.create(
+                user=user, name=item_name, explanation=explanation,
+                shipping_area=shipping_area, shipping_day=shipping_day
+            )
+            messages.success(request, '商品を出品しました。')
+            for f in files:
+                Image.objects.create(item=item_obj, image=f)
+            return redirect('my_page', request.user.id)
+    else:
+        form = CreateFullItemForm()
+
+    context = {'form': form}
+    return render(request, 'cross_book/sell.html', context)
+
+

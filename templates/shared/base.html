@@ -1,10 +1,11 @@
-{% load bootstrap5 %}
+{% load bootstrap4 %}
 {% load static %}
 <!DOCTYPE html>
 <html lang='ja'>
 <head>
     <meta charset="UTF-8">
     {% bootstrap_css %}
+    {% bootstrap_jquery %}
     {% bootstrap_javascript %}
     {% block head %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
@@ -20,10 +21,10 @@
     </ul>
 {% endif %}
 <div class="content">
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
-</body>
 {% block script %}
 {% endblock %}
+</body>
 </html>
