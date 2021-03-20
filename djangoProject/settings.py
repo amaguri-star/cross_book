@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'cross_book.apps.CrossBookConfig',
+    'bootstrap4',
     'bootstrap5',
+    'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [
