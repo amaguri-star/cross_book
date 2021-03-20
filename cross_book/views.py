@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .forms import AddressForm, EditUserProfile, CreateItemForm, CreateFullItemForm
+from .forms import AddressForm, EditUserProfile, CreateFullItemForm
 from .models import User, Item, Image
 
 
@@ -48,10 +48,10 @@ def address_page(request):
 
 def sell_page(request):
     if request.method == "POST":
+        user = request.user
         form = CreateFullItemForm(request.POST, request.FILES)
-        files = request.FILES.getlist('images')
         if form.is_valid():
-            user = request.user
+            images = request.FILES.getlist('images')
             item_name = form.cleaned_data['name']
             explanation = form.cleaned_data['explanation']
             shipping_area = form.cleaned_data['shipping_area']
@@ -61,8 +61,11 @@ def sell_page(request):
                 shipping_area=shipping_area, shipping_day=shipping_day
             )
             messages.success(request, '商品を出品しました。')
-            for f in files:
-                Image.objects.create(item=item_obj, image=f)
+            for image in images:
+                Image.objects.create(
+                    item=item_obj,
+                    image=image
+                )
             return redirect('my_page', request.user.id)
     else:
         form = CreateFullItemForm()

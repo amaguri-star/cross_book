@@ -47,13 +47,17 @@ class EditUserProfile(forms.ModelForm):
 
 
 class CreateItemForm(forms.ModelForm):
+
     class Meta:
         model = Item
         fields = ['name', 'explanation', 'shipping_area', 'shipping_day']
 
 
 class CreateFullItemForm(CreateItemForm):
-    images = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}),label="画像")
+    images = forms.ImageField(label="画像", widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
-    class Meta(CreateItemForm.Meta):
+    class Meta:
+        model = Item
         fields = ['images'] + CreateItemForm.Meta.fields
+
+

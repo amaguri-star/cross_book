@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'cross_book.apps.CrossBookConfig',
     'bootstrap4',
     'bootstrap5',
-    'widget_tweaks'
+    'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [
