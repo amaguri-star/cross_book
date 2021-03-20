@@ -44,3 +44,4 @@ def address_page(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'cross_book/address_form.html', context)
+
