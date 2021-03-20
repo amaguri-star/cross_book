@@ -11,7 +11,7 @@ def home(request):
 
 
 def my_page(request, pk):
-    user = User.objects.get(id=pk)
+    user = get_object_or_404(User, pk)
     context = {'user': user}
     return render(request, 'cross_book/user_profile.html', context)
 
@@ -45,8 +45,6 @@ def address_page(request):
     context = {'form': form}
     return render(request, 'cross_book/address_form.html', context)
 
-<<<<<<< HEAD
-=======
 
 def sell_page(request):
     if request.method == "POST":
@@ -76,4 +74,9 @@ def sell_page(request):
     return render(request, 'cross_book/sell.html', context)
 
 
->>>>>>> Item-model-and-sell-system
+def item_detail(request, pk):
+    user = request.user
+    item = get_object_or_404(Item, pk=pk)
+    item_images = item.image_set.all()
+    context = {'item': item, 'user': user, 'item_images': item_images}
+    return render(request, 'cross_book/item_detail.html', context)

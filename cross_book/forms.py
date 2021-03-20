@@ -61,3 +61,4 @@ class CreateFullItemForm(CreateItemForm):
         fields = ['images'] + CreateItemForm.Meta.fields
 
 
+

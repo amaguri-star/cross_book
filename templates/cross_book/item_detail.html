@@ -1,0 +1,12 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block title %}商品詳細ページ{% endblock %}
+{% block content %}
+    {% for item_image in item_images %}
+        <img src="{{ item_image.image.url }}" alt="">
+    {% endfor %}
+    {{ item.name }}
+    {{ item.explanation }}
+    {{ item.get_shipping_area_display }}
+    {{ item.get_shipping_day_display }}
+{% endblock %}
