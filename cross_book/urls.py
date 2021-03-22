@@ -9,4 +9,5 @@ urlpatterns = [
     path('set_address/', views.address_page, name='set_address'),
     path('sell', views.sell_page, name="sell"),
     path('item/<int:pk>', views.item_detail, name="item_detail"),
+    path('item/<int:pk>/edit/', views.edit_item, name="edit_item"),
 ]

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .forms import AddressForm, EditUserProfile, CreateFullItemForm
+from django import forms
+from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import User, Item, Image
 
 
@@ -47,30 +48,37 @@ def address_page(request):
 
 
 def sell_page(request):
-    if request.method == "POST":
-        user = request.user
-        form = CreateFullItemForm(request.POST, request.FILES)
-        if form.is_valid():
-            images = request.FILES.getlist('images')
-            item_name = form.cleaned_data['name']
-            explanation = form.cleaned_data['explanation']
-            shipping_area = form.cleaned_data['shipping_area']
-            shipping_day = form.cleaned_data['shipping_day']
-            item_obj = Item.objects.create(
-                user=user, name=item_name, explanation=explanation,
-                shipping_area=shipping_area, shipping_day=shipping_day
-            )
-            messages.success(request, '商品を出品しました。')
-            for image in images:
-                Image.objects.create(
-                    item=item_obj,
-                    image=image
-                )
-            return redirect('my_page', request.user.id)
-    else:
-        form = CreateFullItemForm()
+    user = request.user
+    image_form_set = forms.inlineformset_factory(
+        parent_model=Item,
+        model=Image,
+        fields=['image'],
+        extra=3,
+        max_num=3,
+        can_delete=True
+    )
 
-    context = {'form': form}
+    if request.method == "POST":
+        form = CreateItemForm(request.POST)
+        item = form.save(commit=False)
+        formset = image_form_set(
+            request.POST, request.FILES,
+            instance=item,
+            queryset=Image.objects.none()
+        )
+        if form.is_valid() and formset.is_valid():
+            item = form.save(commit=False)
+            item.user = user
+            item.save()
+            formset.save()
+            messages.success(request, '商品を出品しました。')
+            return redirect(request, 'my_page', request.user.id)
+    else:
+        formset = image_form_set(
+            queryset=Image.objects.none()
+        )
+        form = CreateItemForm()
+    context = {'form': form, 'formset': formset}
     return render(request, 'cross_book/sell.html', context)
 
 
@@ -80,3 +88,19 @@ def item_detail(request, pk):
     item_images = item.image_set.all()
     context = {'item': item, 'user': user, 'item_images': item_images}
     return render(request, 'cross_book/item_detail.html', context)
+
+
+def edit_item(request, pk):
+    user = request.user
+    item = get_object_or_404(Item, pk=pk)
+    item_images = item.image_set.all()
+    form = EditItemForm(instance=item)
+    if request.method == 'POST':
+        form = EditItemForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "商品情報を編集しました。")
+            return redirect('my_page', user.id)
+    context = {'form': form, 'item_images': item_images}
+    return render(request, 'cross_book/edit-item.html', context)
+

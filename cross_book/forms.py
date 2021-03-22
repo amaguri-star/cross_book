@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django import forms
-from .models import User, Address, Item
+from .models import User, Address, Item, Image
 
 
 class MyUserChangeForm(UserChangeForm):
@@ -53,12 +53,12 @@ class CreateItemForm(forms.ModelForm):
         fields = ['name', 'explanation', 'shipping_area', 'shipping_day']
 
 
-class CreateFullItemForm(CreateItemForm):
+class EditItemForm(forms.ModelForm):
     images = forms.ImageField(label="画像", widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Item
-        fields = ['images'] + CreateItemForm.Meta.fields
-
+        fields = ['images', 'name', 'explanation', 'shipping_area', 'shipping_day']
+        exclude = ['user', 'at_created']
 
 

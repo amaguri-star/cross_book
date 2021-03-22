@@ -4,65 +4,54 @@
 {% block content %}
     <form class="sell-form" action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {% for field in form %}
-            {% if field.id_for_label == "id_images" %}
-                <div class="select-image-field">
-                    <p>{{ field.label_tag }}</p>
-                    {{ field }}
-                </div>
-                <div class="preview-image-field">
-                    <ul class="preview-images">
-
-                    </ul>
-                </div>
-            {% else %}
-                <div>
-                    <p>{{ field.label_tag }}</p>
-                    {{ field }}
-                </div>
-            {% endif %}
-        {% endfor %}
+        {{ formset.management_form }}
+        <table>
+            {% for fs in formset %}
+                {{ fs }}
+            {% endfor %}
+            {{ form.as_table }}
+        </table>
         <button id="saveBtn" type="submit">出品</button>
     </form>
 {% endblock %}
-{% block script %}
-    <script>
-        $(function () {
-            let dataBox = new DataTransfer();
-            let file_field = document.querySelector('input[type=file]')
-            $('#id_images').change(function () {
-                let files = $('input[type="file"]').prop('files')[0];
-
-                $.each(this.files, function (i, file) {
-                    if (dataBox.items.length < 5) {
-                        let fileReader = new FileReader();
-                        dataBox.items.add(file)
-                        file_field.files = dataBox.files
-                        fileReader.readAsDataURL(file);
-                        fileReader.onloadend = function () {
-                            let src = fileReader.result
-                            let html = `<li class="item-image-container__unit--preview" >
-                      <div class="item-image-container__unit--caption">
-                        <img src="${src}">
-                      </div>
-                      <div class="image-option">
-                        <div  class="image-option__list">
-                          <div class="image-option__list--tag">編集</div>
-                        </div>
-                        <div class="image-option__list">
-                          <a class="image-option__list--tag">削除</a>
-                        </div>
-                      </div>
-                    </li>`
-                            $(html).appendTo(".preview-image-field ul").trigger("build")
-                        };
-                    }
-                    console.log(dataBox);
-                    if (dataBox.items.length > 4) {
-                        return false;
-                    }
-                })
-            })
-        })
-    </script>
-{% endblock %}
+{#{% block script %}#}
+{#    <script>#}
+{#        $(function () {#}
+{#            let dataBox = new DataTransfer();#}
+{#            let file_field = document.querySelector('input[type=file]')#}
+{#            $('#id_images').change(function () {#}
+{#                let files = $('input[type="file"]').prop('files')[0];#}
+{##}
+{#                $.each(this.files, function (i, file) {#}
+{#                    if (dataBox.items.length < 5) {#}
+{#                        let fileReader = new FileReader();#}
+{#                        dataBox.items.add(file)#}
+{#                        file_field.files = dataBox.files#}
+{#                        fileReader.readAsDataURL(file);#}
+{#                        fileReader.onloadend = function () {#}
+{#                            let src = fileReader.result#}
+{#                            let html = `<li class="item-image-container__unit--preview" >#}
+{#                      <div class="item-image-container__unit--caption">#}
+{#                        <img src="${src}">#}
+{#                      </div>#}
+{#                      <div class="image-option">#}
+{#                        <div  class="image-option__list">#}
+{#                          <div class="image-option__list--tag">編集</div>#}
+{#                        </div>#}
+{#                        <div class="image-option__list">#}
+{#                          <a class="image-option__list--tag">削除</a>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    </li>`#}
+{#                            $(html).appendTo(".preview-image-field ul").trigger("build")#}
+{#                        };#}
+{#                    }#}
+{#                    console.log(dataBox);#}
+{#                    if (dataBox.items.length > 4) {#}
+{#                        return false;#}
+{#                    }#}
+{#                })#}
+{#            })#}
+{#        })#}
+{#    </script>#}
+{#{% endblock %}#}
