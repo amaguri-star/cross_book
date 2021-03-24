@@ -2,11 +2,48 @@
 {% load static %}
 {% block title %}商品詳細ページ{% endblock %}
 {% block content %}
-    {% for item_image in item_images %}
-        <img src="{{ item_image.image.url }}" alt="">
-    {% endfor %}
-    {{ item.name }}
-    {{ item.explanation }}
-    {{ item.get_shipping_area_display }}
-    {{ item.get_shipping_day_display }}
+    <div class="item-detail-page">
+        <div class="item-detail-page-content">
+            <div class="item-image-part">
+                <div class="heading-image">
+                    <div class="item-image-wrapper">
+                        <img src="{{ thumbnail.image.url }}" id="featured" class="item-image">
+                    </div>
+                </div>
+                <div class="image-preview-zone">
+                    {% for item_image in item_images %}
+                        {% if forloop.counter == 1 %}
+                            <div class="item-image-wrapper">
+                                <img src="{{ thumbnail.image.url }}" class="item-image select-image active">
+                            </div>
+                        {% else %}
+                            <div class="item-image-wrapper">
+                                <img src="{{ item_image.image.url }}" class="item-image select-image">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            {{ item.name }}
+            {{ item.explanation }}
+            {{ item.get_shipping_area_display }}
+            {{ item.get_shipping_day_display }}
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        let selectImage = document.getElementsByClassName('select-image')
+        let activeImage = document.getElementsByClassName('active')
+        for (var i = 0; i < selectImage.length; i++) {
+            selectImage[i].addEventListener('click', function () {
+                if (activeImage.length > 0) {
+                    activeImage[0].classList.remove('active')
+                }
+                this.classList.add('active')
+                document.getElementById('featured').src = this.src
+            })
+        }
+    </script>
 {% endblock %}

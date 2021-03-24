@@ -12,7 +12,7 @@ def home(request):
 
 
 def my_page(request, pk):
-    user = get_object_or_404(User, pk)
+    user = get_object_or_404(User, pk=pk)
     context = {'user': user}
     return render(request, 'cross_book/user_profile.html', context)
 
@@ -72,7 +72,7 @@ def sell_page(request):
             item.save()
             formset.save()
             messages.success(request, '商品を出品しました。')
-            return redirect(request, 'my_page', request.user.id)
+            return redirect('my_page', request.user.id)
     else:
         formset = image_form_set(
             queryset=Image.objects.none()
@@ -86,7 +86,8 @@ def item_detail(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
     item_images = item.image_set.all()
-    context = {'item': item, 'user': user, 'item_images': item_images}
+    thumbnail = item.image_set.all()[0]
+    context = {'item': item, 'user': user, 'item_images': item_images, 'thumbnail': thumbnail}
     return render(request, 'cross_book/item_detail.html', context)
 
 

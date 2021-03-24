@@ -157,8 +157,8 @@ class Item(models.Model):
     shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0])
     at_created = models.DateTimeField(verbose_name="出品日", auto_created=True, null=True)
 
-    def __str__(self):
-        return f'{self.name} of {self.user.username}'
+    # def __str__(self):
+    #     return f'{self.name} of {self.user.username}'
 
 
 def get_image_filename(instance, filename):
