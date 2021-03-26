@@ -55,7 +55,7 @@ def sell_page(request):
         fields=['image'],
         extra=3,
         max_num=3,
-        can_delete=True
+        can_delete=False,
     )
 
     if request.method == "POST":

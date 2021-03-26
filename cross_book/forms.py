@@ -59,6 +59,6 @@ class EditItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['images', 'name', 'explanation', 'shipping_area', 'shipping_day']
-        exclude = ['user', 'at_created']
+        exclude = ['user']
 
 

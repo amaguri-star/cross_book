@@ -14,7 +14,7 @@
                     {% for item_image in item_images %}
                         {% if forloop.counter == 1 %}
                             <div class="item-image-wrapper">
-                                <img src="{{ thumbnail.image.url }}" class="item-image select-image active">
+                                <img src="{{ thumbnail.image.url }}" class="item-image select-image active_img">
                             </div>
                         {% else %}
                             <div class="item-image-wrapper">
@@ -24,24 +24,45 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="item-detail-part">
+                <table class="table table-striped">
+                    <tr>
+                        <th>商品名</th>
+                        <td>{{ item.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>出品者からの一言</th>
+                        <td>{{ item.explanation }}</td>
+                    </tr>
+                    <tr>
+                        <th>配送地</th>
+                        <td>{{ item.get_shipping_area_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>配送日数</th>
+                        <td>{{ item.get_shipping_day_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>出品日</th>
+                        <td>{{ item.at_created }}</td>
+                    </tr>
+                </table>
 
-            {{ item.name }}
-            {{ item.explanation }}
-            {{ item.get_shipping_area_display }}
-            {{ item.get_shipping_day_display }}
+            </div>
         </div>
     </div>
 {% endblock %}
 {% block script %}
     <script>
         let selectImage = document.getElementsByClassName('select-image')
-        let activeImage = document.getElementsByClassName('active')
+        let activeImage = document.getElementsByClassName('active_img')
         for (var i = 0; i < selectImage.length; i++) {
+            console.log(activeImage)
             selectImage[i].addEventListener('click', function () {
                 if (activeImage.length > 0) {
-                    activeImage[0].classList.remove('active')
+                    activeImage[0].classList.remove('active_img')
                 }
-                this.classList.add('active')
+                this.classList.add('active_img')
                 document.getElementById('featured').src = this.src
             })
         }

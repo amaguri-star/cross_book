@@ -43,13 +43,15 @@ input, textarea, select {
 /*商品詳細ページ*/
 .heading-image .item-image {
     display: block;
-    max-width: 300px;
-    max-height: 300px;
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
 }
 
 .select-image {
-    max-width: 100px;
-    max-height: 100px;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
 }
 
 .item-detail-page {
@@ -89,6 +91,6 @@ input, textarea, select {
     cursor: pointer;
 }
 
-.active {
+.active_img {
     opacity: 1;
 }
