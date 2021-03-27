@@ -50,7 +50,7 @@ class CreateItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ['name', 'explanation', 'shipping_area', 'shipping_day']
+        fields = ['name', 'explanation', 'state' , 'shipping_area', 'shipping_day']
 
 
 class EditItemForm(forms.ModelForm):
@@ -58,7 +58,7 @@ class EditItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ['images', 'name', 'explanation', 'shipping_area', 'shipping_day']
+        fields = ['images', 'name', 'explanation', 'state', 'shipping_area', 'shipping_day']
         exclude = ['user']
 
 

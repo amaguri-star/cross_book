@@ -60,6 +60,8 @@ def sell_page(request):
         extra=3,
         max_num=3,
         can_delete=False,
+        min_num=1,
+        validate_min=True,
     )
 
     if request.method == "POST":

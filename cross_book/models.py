@@ -150,9 +150,21 @@ class Item(models.Model):
         (3, "4~7日で発送")
     )
 
+    STATE = (
+        (0, "選択してください"),
+        (1, "未使用"),
+        (2, "未使用に近い状態"),
+        (3, "目立った傷や汚れなし"),
+        (4, "やや傷や汚れあり"),
+        (5, "傷や汚れあり"),
+        (6, "全体的に状態が悪い")
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="商品名", max_length=30)
-    explanation = models.TextField(verbose_name="出品者からの一言", max_length=1000, blank=True)
+    likes = models.ManyToManyField(User, related_name="post_likes", blank=True)
+    explanation = models.TextField(verbose_name="出品者からの一言", max_length=3000, blank=True)
+    state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0])
     shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0])
     shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0])
     at_created = models.DateTimeField(verbose_name="出品日", auto_now_add=True)
