@@ -13,7 +13,11 @@ def home(request):
 
 def my_page(request, pk):
     user = get_object_or_404(User, pk=pk)
-    context = {'user': user}
+    items = user.item_set.all()
+    item_first_image = []
+    for i in items:
+        item_first_image.append(i.image_set.all()[0])
+    context = {'user': user, 'items': items, 'item_first_image': item_first_image}
     return render(request, 'cross_book/user_profile.html', context)
 
 

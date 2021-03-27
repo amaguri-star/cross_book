@@ -2,9 +2,38 @@
 {% load static %}
 {% block title %}マイページ{% endblock %}
 {% block content %}
-    <div>
-    {{ user.username }}
-        <img src="{{ user.image.url }}" alt="">
-    {{ user.profile_text }}
+    <div class="user-content-wrapper">
+        <div class="header-profile-page">
+            <div class="user-icon-image-and-edit-button-wrapper">
+                <div class="user-icon-image-wrapper">
+                    <img class="user-icon-image" src="{{ user.image.url }}" alt="ユーザーアカウントの画像">
+                </div>
+                <div class="user-edit-button-wrapper">
+                    <div class="edit-profile-button">
+                        <a href="{% url 'edit_user_profile' user.id %}">
+                            <button>プロフィールを編集する</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="user-name">
+                {{ user.username }}
+            </div>
+            <div class="user-profile-text">
+                {{ user.profile_text }}
+            </div>
+        </div>
+        <div class="user-item-part-content">
+            <div class="user-item-part">
+                <div class="user-item-part-wrapper">
+                    {% for i in item_first_image %}
+                        <div class="specific-user-item-image-wrapper">
+                            <div class="specific-user-item-image"
+                                 style="background: url({{ i.image.url }}) no-repeat center; background-size: contain;"></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
