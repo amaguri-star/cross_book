@@ -162,7 +162,6 @@ class Item(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="商品名", max_length=30)
-    likes = models.ManyToManyField(User, related_name="post_likes", blank=True)
     explanation = models.TextField(verbose_name="出品者からの一言", max_length=3000, blank=True)
     state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0])
     shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0])
@@ -182,4 +181,10 @@ def get_image_filename(instance, filename):
 class Image(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     image = models.ImageField(verbose_name="画像", upload_to=get_image_filename)
+
+
+class Like(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 

@@ -8,6 +8,8 @@ input, textarea, select {
 }
 
 
+
+
 /*プロフィールページ*/
 .user-content-wrapper {
     width: 80%;
@@ -143,8 +145,6 @@ input, textarea, select {
     background-color: rgba(102, 102, 102, 0.2);
     display: flex;
     justify-content: center;
-    border: solid 1px black;
-
 }
 
 .image-preview-zone .item-image-wrapper {
@@ -164,3 +164,12 @@ input, textarea, select {
 .active_img {
     opacity: 1;
 }
+
+.like-red {
+    color: red;
+}
+
+
+
+
+

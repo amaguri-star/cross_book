@@ -1,0 +1,9 @@
+<form action="{% url 'likes' %}" method="POST">
+    {% csrf_token %}
+    {% if item_liked %}
+        <button id="like" name="{{ item.id }}"><i class="fas fa-2x fa-heart like-red"></i></button>
+    {% else %}
+        <button id="like" name="{{ item.id }}"><i class="far fa-2x fa-heart"></i></button>
+    {% endif %}
+</form>
+<p name="{{ item.id }}-count" class="count">{{ item.like_set.count }}</p>

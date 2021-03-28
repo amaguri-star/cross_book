@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import JsonResponse
 from django import forms
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
-from .models import User, Item, Image
+from .models import User, Item, Image, Like
 
 
 # Create your views here.
@@ -13,11 +14,29 @@ def home(request):
 
 def my_page(request, pk):
     user = get_object_or_404(User, pk=pk)
-    items = user.item_set.all()
-    item_first_image = []
-    for i in items:
-        item_first_image.append(i.image_set.all()[0])
-    context = {'user': user, 'items': items, 'item_first_image': item_first_image}
+    all_items = Item.objects.all()
+    items_of_user = user.item_set.all()
+    users_item_first_image = []
+    liked_list = []
+    liked_item_first_image = []
+
+    for item_of_user in items_of_user:
+        users_item_first_image.append(item_of_user.image_set.all()[0])
+
+    for item in all_items:
+        liked = item.like_set.filter(user=user)
+        if liked.exists():
+            liked_list.append(item.id)
+            liked_item_first_image.append(item.image_set.all()[0])
+
+    context = {
+        'user': user,
+        'items_of_user': items_of_user,
+        'users_item_first_image': users_item_first_image,
+        'liked_list': liked_list,
+        'liked_item_first_image': liked_item_first_image
+        }
+
     return render(request, 'cross_book/user_profile.html', context)
 
 
@@ -91,9 +110,16 @@ def sell_page(request):
 def item_detail(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
+    item_liked = item.like_set.filter(user=user)
     item_images = item.image_set.all()
     thumbnail = item.image_set.all()[0]
-    context = {'item': item, 'user': user, 'item_images': item_images, 'thumbnail': thumbnail}
+    context = {
+        'item': item,
+        'user': user,
+        'item_liked': item_liked,
+        'item_images': item_images,
+        'thumbnail': thumbnail
+    }
     return render(request, 'cross_book/item_detail.html', context)
 
 
@@ -111,3 +137,25 @@ def edit_item(request, pk):
     context = {'form': form, 'item_images': item_images}
     return render(request, 'cross_book/edit-item.html', context)
 
+
+def likes(request):
+    if request.method == 'POST':
+        item = get_object_or_404(Item, pk=request.POST.get('item_id'))
+        user = request.user
+        liked = False
+        like = Like.objects.filter(item=item, user=user)
+
+        if like.exists():
+            like.delete()
+        else:
+            like.create(item=item, user=user)
+            liked = True
+
+        context = {
+            'item_id': item.id,
+            'liked': liked,
+            'count': item.like_set.count(),
+        }
+
+        if request.is_ajax():
+            return JsonResponse(context)
