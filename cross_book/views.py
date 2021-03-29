@@ -37,7 +37,7 @@ def my_page(request, pk):
         'users_item_first_image': users_item_first_image,
         'liked_list': liked_list,
         'liked_item_first_image': liked_item_first_image
-        }
+    }
 
     return render(request, 'cross_book/user_profile.html', context)
 
@@ -73,7 +73,6 @@ def address_page(request):
 
 
 def sell_page(request):
-    user = request.user
     image_form_set = forms.inlineformset_factory(
         parent_model=Item,
         model=Image,
@@ -87,24 +86,22 @@ def sell_page(request):
 
     if request.method == "POST":
         form = CreateItemForm(request.POST)
-        item = form.save(commit=False)
-        formset = image_form_set(
-            request.POST, request.FILES,
-            instance=item,
-            queryset=Image.objects.none()
-        )
+        formset = image_form_set(request.POST, request.FILES, queryset=Image.objects.none())
         if form.is_valid() and formset.is_valid():
             item = form.save(commit=False)
-            item.user = user
+            item.user = request.user
             item.save()
-            formset.save()
+            images = formset.save(commit=False)
+            for image in images:
+                image.item = item
+                image.save()
             messages.success(request, '商品を出品しました。')
             return redirect('my_page', request.user.id)
-    else:
-        formset = image_form_set(
-            queryset=Image.objects.none()
-        )
-        form = CreateItemForm()
+        else:
+            return render(request, 'cross_book/sell.html', {'form': form, 'formset': formset})
+
+    formset = image_form_set(queryset=Image.objects.none())
+    form = CreateItemForm()
     context = {'form': form, 'formset': formset}
     return render(request, 'cross_book/sell.html', context)
 
@@ -161,5 +158,3 @@ def likes(request):
 
         if request.is_ajax():
             return JsonResponse(context)
-
-

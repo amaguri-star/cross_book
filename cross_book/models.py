@@ -4,8 +4,10 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.conf import settings
+from django.core.exceptions import ValidationError
+# from django.conf import settings
 from django.template.defaultfilters import slugify
+# from .validators import *
 
 
 # Create your models here.
@@ -176,13 +178,21 @@ class Item(models.Model):
         (9, "その他")
     )
 
+    def validate_choice(value):
+        if value == 0:
+            raise ValidationError(
+                _("選択してください"),
+                params={'value': value}
+            )
+        return value
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="商品名", max_length=30)
     explanation = models.TextField(verbose_name="出品者からの一言", max_length=3000, blank=True)
-    state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0])
-    category = models.IntegerField(verbose_name="カテゴリ", choices=CATEGORY, default=CATEGORY[0][0])
-    shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0])
-    shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0])
+    state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0], validators=[validate_choice])
+    category = models.IntegerField(verbose_name="カテゴリ", choices=CATEGORY, default=CATEGORY[0][0], validators=[validate_choice])
+    shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0], validators=[validate_choice])
+    shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0], validators=[validate_choice])
     at_created = models.DateTimeField(verbose_name="出品日", auto_now_add=True)
 
     def __str__(self):
