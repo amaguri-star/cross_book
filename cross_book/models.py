@@ -169,7 +169,7 @@ class Item(models.Model):
     at_created = models.DateTimeField(verbose_name="出品日", auto_now_add=True)
 
     def __str__(self):
-        return f'{self.name} of {self.user.username}'
+        return f'{self.user.username}\'s {self.name}'
 
 
 def get_image_filename(instance, filename):

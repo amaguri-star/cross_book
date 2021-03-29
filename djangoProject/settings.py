@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'bootstrap5',
     'widget_tweaks',
+    'django_boost'
 
 ]
 

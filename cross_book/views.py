@@ -16,6 +16,7 @@ def my_page(request, pk):
     user = get_object_or_404(User, pk=pk)
     all_items = Item.objects.all()
     items_of_user = user.item_set.all()
+    length = items_of_user.count()
     users_item_first_image = []
     liked_list = []
     liked_item_first_image = []
@@ -32,6 +33,7 @@ def my_page(request, pk):
     context = {
         'user': user,
         'items_of_user': items_of_user,
+        'length': length,
         'users_item_first_image': users_item_first_image,
         'liked_list': liked_list,
         'liked_item_first_image': liked_item_first_image
@@ -159,3 +161,5 @@ def likes(request):
 
         if request.is_ajax():
             return JsonResponse(context)
+
+
