@@ -21,22 +21,22 @@ class AddressForm(forms.ModelForm):
         fields = ("zip_code", "address1", "address2", "address3")
         widgets = {
             'zip_code':
-            forms.TextInput(
-                attrs={'class': 'p-postal-code', 'placeholder': '記入例:8005543'}
-            ),
+                forms.TextInput(
+                    attrs={'class': 'p-postal-code', 'placeholder': '記入例:8005543'}
+                ),
             'address1':
-            forms.Select(
-                attrs={'class': 'p-region-id', 'placeholder': '記入例:福岡県'}
-            ),
+                forms.Select(
+                    attrs={'class': 'p-region-id', 'placeholder': '記入例:福岡県'}
+                ),
             'address2':
-            forms.TextInput(
-                attrs={'class': 'p-locality p-street-address p-extended-address',
-                       'placeholder': '記入例:福岡市中央区赤坂２丁目３１−１'}
-            ),
+                forms.TextInput(
+                    attrs={'class': 'p-locality p-street-address p-extended-address',
+                           'placeholder': '記入例:福岡市中央区赤坂２丁目３１−１'}
+                ),
             'address3':
-            forms.TextInput(
-                attrs={'class': '', 'placeholder': '記入例:クロスブックビル606号室'}
-            )
+                forms.TextInput(
+                    attrs={'class': '', 'placeholder': '記入例:クロスブックビル606号室'}
+                )
         }
 
 
@@ -47,18 +47,12 @@ class EditUserProfile(forms.ModelForm):
 
 
 class CreateItemForm(forms.ModelForm):
-
     class Meta:
         model = Item
-        fields = ['name', 'explanation', 'state' , 'shipping_area', 'shipping_day']
+        exclude = ['user', 'at_created']
 
 
 class EditItemForm(forms.ModelForm):
-    images = forms.ImageField(label="画像", widget=forms.ClearableFileInput(attrs={'multiple': True}))
-
     class Meta:
         model = Item
-        fields = ['images', 'name', 'explanation', 'state', 'shipping_area', 'shipping_day']
-        exclude = ['user']
-
-
+        exclude = ['user', 'at_created']

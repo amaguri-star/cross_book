@@ -78,56 +78,56 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 LOCATION = (
-        (0, "選択してください"),
-        (1, "北海道"),
-        (2, "青森県"),
-        (3, "岩手県"),
-        (4, "宮城県"),
-        (5, "秋田県"),
-        (6, "山形県"),
-        (7, "福島県"),
-        (8, "茨城県"),
-        (9, "栃木県"),
-        (10, "群馬県"),
-        (11, "埼玉県"),
-        (12, "千葉県"),
-        (13, "東京都"),
-        (14, "神奈川県"),
-        (15, "新潟県"),
-        (16, "富山県"),
-        (17, "石川県"),
-        (18, "福井県"),
-        (19, "山梨県"),
-        (20, "長野県"),
-        (21, "岐阜県"),
-        (22, "静岡県"),
-        (23, "愛知県"),
-        (24, "三重県"),
-        (25, "滋賀県"),
-        (26, "京都府"),
-        (27, "大阪府"),
-        (28, "兵庫県"),
-        (29, "奈良県"),
-        (30, "和歌山県"),
-        (31, "鳥取県"),
-        (32, "島根県"),
-        (33, "岡山県"),
-        (34, "広島県"),
-        (35, "山口県"),
-        (36, "徳島県"),
-        (37, "香川県"),
-        (38, "愛媛県"),
-        (39, "高知県"),
-        (40, "福岡県"),
-        (41, "佐賀県"),
-        (42, "長崎県"),
-        (43, "熊本県"),
-        (44, "大分県"),
-        (45, "宮崎県"),
-        (46, "鹿児島県"),
-        (47, "沖縄県"),
-        (48, "未定")
-    )
+    (0, "選択してください"),
+    (1, "北海道"),
+    (2, "青森県"),
+    (3, "岩手県"),
+    (4, "宮城県"),
+    (5, "秋田県"),
+    (6, "山形県"),
+    (7, "福島県"),
+    (8, "茨城県"),
+    (9, "栃木県"),
+    (10, "群馬県"),
+    (11, "埼玉県"),
+    (12, "千葉県"),
+    (13, "東京都"),
+    (14, "神奈川県"),
+    (15, "新潟県"),
+    (16, "富山県"),
+    (17, "石川県"),
+    (18, "福井県"),
+    (19, "山梨県"),
+    (20, "長野県"),
+    (21, "岐阜県"),
+    (22, "静岡県"),
+    (23, "愛知県"),
+    (24, "三重県"),
+    (25, "滋賀県"),
+    (26, "京都府"),
+    (27, "大阪府"),
+    (28, "兵庫県"),
+    (29, "奈良県"),
+    (30, "和歌山県"),
+    (31, "鳥取県"),
+    (32, "島根県"),
+    (33, "岡山県"),
+    (34, "広島県"),
+    (35, "山口県"),
+    (36, "徳島県"),
+    (37, "香川県"),
+    (38, "愛媛県"),
+    (39, "高知県"),
+    (40, "福岡県"),
+    (41, "佐賀県"),
+    (42, "長崎県"),
+    (43, "熊本県"),
+    (44, "大分県"),
+    (45, "宮崎県"),
+    (46, "鹿児島県"),
+    (47, "沖縄県"),
+    (48, "未定")
+)
 
 
 class Address(models.Model):
@@ -141,8 +141,11 @@ class Address(models.Model):
         return f'{self.user.username} の配送先情報'
 
 
-class Item(models.Model):
+class Category(models.Model):
+    name = models.CharField(verbose_name="タグ", max_length=20)
 
+
+class Item(models.Model):
     DAYS = (
         (0, "選択してください"),
         (1, "1~2日で発送"),
@@ -160,10 +163,24 @@ class Item(models.Model):
         (6, "全体的に状態が悪い")
     )
 
+    CATEGORY = (
+        (0, "選択してください"),
+        (1, "文学・エッセイ"),
+        (2, "ビジネス・経済"),
+        (3, "漫画・ラノベ"),
+        (4, "趣味・実用"),
+        (5, "学問・資格・教育"),
+        (6, "絵本・児童書"),
+        (7, "エンタメ"),
+        (8, "雑誌・ムック"),
+        (9, "その他")
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="商品名", max_length=30)
     explanation = models.TextField(verbose_name="出品者からの一言", max_length=3000, blank=True)
     state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0])
+    category = models.IntegerField(verbose_name="カテゴリ", choices=CATEGORY, default=CATEGORY[0][0])
     shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0])
     shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0])
     at_created = models.DateTimeField(verbose_name="出品日", auto_now_add=True)
@@ -187,4 +204,3 @@ class Like(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
