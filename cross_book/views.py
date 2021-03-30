@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django import forms
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
-from .models import User, Item, Image, Like
+from .models import *
 
 
 # Create your views here.
@@ -135,6 +135,19 @@ def edit_item(request, pk):
             return redirect('my_page', user.id)
     context = {'form': form, 'item_images': item_images}
     return render(request, 'cross_book/edit-item.html', context)
+
+
+def category_page(request, pk):
+    if pk == 1:
+        return redirect('home')
+    category = get_object_or_404(Category, id=pk)
+    items = Item.objects.filter(category=category)
+    item_first_images = []
+    for item in items:
+        image = item.image_set.all()[0]
+        item_first_images.append(image)
+    context = {'items': items, 'item_first_image': item_first_images, 'category': category}
+    return render(request, 'cross_book/category_page.html', context)
 
 
 def likes(request):
