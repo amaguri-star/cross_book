@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django import forms
-from .models import User, Address, Item, Image
+from .models import *
 
 
 class MyUserChangeForm(UserChangeForm):
@@ -46,10 +46,16 @@ class EditUserProfile(forms.ModelForm):
         fields = ('username', 'image', 'profile_text')
 
 
+choices = Category.objects.all().values_list('name', 'name')
+
+
 class CreateItemForm(forms.ModelForm):
     class Meta:
         model = Item
         exclude = ['user', 'at_created']
+        widgets = {
+            'category': forms.Select(choices=choices)
+        }
 
 
 class EditItemForm(forms.ModelForm):

@@ -7,6 +7,8 @@ from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 # from django.conf import settings
 from django.template.defaultfilters import slugify
+
+
 # from .validators import *
 
 
@@ -143,10 +145,6 @@ class Address(models.Model):
         return f'{self.user.username} の配送先情報'
 
 
-class Category(models.Model):
-    name = models.CharField(verbose_name="タグ", max_length=20)
-
-
 class Item(models.Model):
     DAYS = (
         (0, "選択してください"),
@@ -165,21 +163,16 @@ class Item(models.Model):
         (6, "全体的に状態が悪い")
     )
 
-    CATEGORY = (
-        (0, "選択してください"),
-        (1, "文学・エッセイ"),
-        (2, "ビジネス・経済"),
-        (3, "漫画・ラノベ"),
-        (4, "趣味・実用"),
-        (5, "学問・資格・教育"),
-        (6, "絵本・児童書"),
-        (7, "エンタメ"),
-        (8, "雑誌・ムック"),
-        (9, "その他")
-    )
-
     def validate_choice(value):
         if value == 0:
+            raise ValidationError(
+                _("選択してください"),
+                params={'value': value}
+            )
+        return value
+
+    def validate_category(value):
+        if value == "選択してください":
             raise ValidationError(
                 _("選択してください"),
                 params={'value': value}
@@ -190,13 +183,22 @@ class Item(models.Model):
     name = models.CharField(verbose_name="商品名", max_length=30)
     explanation = models.TextField(verbose_name="出品者からの一言", max_length=3000, blank=True)
     state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0], validators=[validate_choice])
-    category = models.IntegerField(verbose_name="カテゴリ", choices=CATEGORY, default=CATEGORY[0][0], validators=[validate_choice])
-    shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0], validators=[validate_choice])
-    shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0], validators=[validate_choice])
+    category = models.CharField(verbose_name="カテゴリ", max_length=255, default="選択してください", validators=[validate_category])
+    shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0],
+                                        validators=[validate_choice])
+    shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0],
+                                       validators=[validate_choice])
     at_created = models.DateTimeField(verbose_name="出品日", auto_now_add=True)
 
     def __str__(self):
         return f'{self.user.username}\'s {self.name}'
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 def get_image_filename(instance, filename):

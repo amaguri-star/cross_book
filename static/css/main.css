@@ -7,6 +7,10 @@ input, textarea, select {
     width: 100%;
 }
 
+.errorlist {
+    color: red;
+}
+
 
 
 
