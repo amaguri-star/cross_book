@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django import forms
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import *
+from .decorators import *
 
 
 # Create your views here.
@@ -42,23 +44,23 @@ def my_page(request, pk):
     return render(request, 'cross_book/user_profile.html', context)
 
 
+@login_required
+@unauthorized_user
 def edit_user_profile(request, pk):
-    if request.user == User.objects.get(id=pk):
-        user = request.user
-        form = EditUserProfile(instance=user)
-        if request.method == 'POST':
-            form = EditUserProfile(request.POST, request.FILES, instance=user)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'プロフィールを変更しました。')
-                return redirect('my_page', user.id)
+    user = request.user
+    form = EditUserProfile(instance=user)
+    if request.method == 'POST':
+        form = EditUserProfile(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'プロフィールを変更しました。')
+            return redirect('my_page', user.id)
 
-        context = {'form': form}
-        return render(request, 'cross_book/edit_user_profile.html', context)
-    else:
-        return redirect('home')
+    context = {'form': form}
+    return render(request, 'cross_book/edit_user_profile.html', context)
 
 
+@login_required
 def address_page(request):
     user = request.user
     form = AddressForm(instance=request.user.address)
@@ -72,6 +74,7 @@ def address_page(request):
     return render(request, 'cross_book/address_form.html', context)
 
 
+@login_required
 def sell_page(request):
     image_form_set = forms.inlineformset_factory(
         parent_model=Item,
@@ -122,6 +125,8 @@ def item_detail(request, pk):
     return render(request, 'cross_book/item_detail.html', context)
 
 
+@login_required
+@user_who_not_allowed_to_edit
 def edit_item(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
@@ -150,6 +155,7 @@ def category_page(request, pk):
     return render(request, 'cross_book/category_page.html', context)
 
 
+@login_required
 def likes(request):
     if request.method == 'POST':
         item = get_object_or_404(Item, pk=request.POST.get('item_id'))
