@@ -1,13 +1,22 @@
 {% extends 'shared/base.html' %}
 {% block title %}新規登録{% endblock %}
 {% block content %}
-    <h1>新規登録</h1>
-    <form action="" method="POST">
-    {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <button type="submit">登録</button>
-    </form>
-    <p>登録済みの方は<a href="{% url 'account_login' %}">こちら</a></p>
+    <div class="form-field-outer">
+        <div class="form-field-wrapper">
+            <h1 class="form-header">新規登録</h1>
+            <hr>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="input-field">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <hr>
+                <button class="submit-button" type="submit">登録</button>
+            </form>
+            <p class="auth-link">登録済みの方は<a href="{% url 'account_login' %}">こちら</a></p>
+        </div>
+
+    </div>
 {% endblock %}

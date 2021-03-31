@@ -1,10 +1,9 @@
-body {
-    font-family: sans-serif;
-    letter-spacing: 3px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Roboto&display=swap');
 
-input, textarea, select {
-    width: 100%;
+
+body {
+    font-family: 'Kosugi Maru', sans-serif;
+    letter-spacing: 3px;
 }
 
 .errorlist {
@@ -12,6 +11,58 @@ input, textarea, select {
 }
 
 
+.form-field-outer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 400px;
+    margin: 5em auto;
+    box-shadow: 0 0 8px gray;
+    border-radius: 5px;
+}
+
+.form-field-wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+    margin: 30px 0;
+}
+
+
+.form-header {
+    font-size: 40px;
+}
+
+.form-field-outer form {
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.form-field-outer .input-field {
+    width: 80%;
+}
+
+.form-field-outer input[type="email"], input[type="text"], input[type="password"] {
+    width: 100%;
+}
+
+.form-field-outer div + div {
+    margin-top: 10px;
+}
+
+.submit-button {
+    display: block;
+    width: 80%;
+    border-radius: 10px;
+    background-color: deeppink;
+    border-color: snow;
+    height: 45px;
+    color: white;
+}
 
 
 /*プロフィールページ*/
@@ -117,9 +168,6 @@ input, textarea, select {
 }
 
 
-
-
-
 /*商品詳細ページ*/
 .heading-image .item-image {
     display: block;
@@ -176,13 +224,6 @@ input, textarea, select {
 .like-red {
     color: red;
 }
-
-
-
-
-
-
-
 
 
 /*カテゴリーページ*/

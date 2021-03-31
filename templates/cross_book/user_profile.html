@@ -9,6 +9,7 @@
                 <div class="user-icon-image-wrapper">
                     <img class="user-icon-image" src="{{ user.image.url }}" alt="ユーザーアカウントの画像">
                 </div>
+                {% if request.user == user %}
                 <div class="user-edit-button-wrapper">
                     <div class="edit-profile-button">
                         <a href="{% url 'edit_user_profile' user.id %}">
@@ -16,6 +17,7 @@
                         </a>
                     </div>
                 </div>
+                {% endif %}
             </div>
             <div class="user-name">
                 {{ user.username }}
