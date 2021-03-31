@@ -1,0 +1,26 @@
+{% extends 'shared/base.html' %}
+{% load boost %}
+{% load static %}
+{% block title %}
+    {{ category.name }} ページ
+{% endblock %}
+{% block content %}
+    <div class="category-page-outer">
+
+        <div class="category-name">
+            {{ category.name }}
+        </div>
+        <div class="user-item-part-content">
+            <div class="user-item-part">
+                <div class="user-item-part-wrapper">
+                    {% for item, image in items|zip:item_first_image %}
+                        <a href="{% url 'item_detail' item.id %}" class="specific-user-item-image-wrapper">
+                            <div class="specific-user-item-image"
+                                 style="background: url({{ image.image.url }}) no-repeat center; background-size: contain;"></div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

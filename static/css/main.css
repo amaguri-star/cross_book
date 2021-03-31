@@ -181,3 +181,12 @@ input, textarea, select {
 
 
 
+
+
+
+
+/*カテゴリーページ*/
+.category-page-outer {
+    padding: 0 200px;
+}
+
