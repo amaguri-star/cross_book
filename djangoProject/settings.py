@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'cross_book.apps.CrossBookConfig',
+    'channels',
+    'channels_redis',
     'bootstrap4',
     'widget_tweaks',
-    'django_boost'
+    'django_boost',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +83,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djangoProject.wsgi.application'
+ASGI_APPLICATION = 'mysite.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)]
+        }
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
