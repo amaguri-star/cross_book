@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from django import forms
+import json
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import *
 from .decorators import *
+import pdb
 
 
-# Create your views here.
 def home(request):
     context = {}
     return render(request, 'cross_book/home.html', context)
@@ -153,6 +156,30 @@ def category_page(request, pk):
         item_first_images.append(image)
     context = {'items': items, 'item_first_image': item_first_images, 'category': category}
     return render(request, 'cross_book/category_page.html', context)
+
+
+@login_required
+@require_POST
+def create_room(request):
+    room = Room.objects.create()
+    item_num = request.POST.get('item_number')
+    item_user = get_object_or_404(Item, pk=item_num).user
+    UserRoom.objects.create(user=request.user, room=room)
+    UserRoom.objects.create(user=item_user, room=room)
+    return redirect('chat_room', room.id)
+
+
+@login_required
+def chat_room(request, room_pk):
+    room = get_object_or_404(Room, pk=room_pk)
+    room.userroom_set.filter(user=request.user, room=room)
+    context = {
+        'room_pk': mark_safe(json.dumps(room_pk)),
+        'username': mark_safe(json.dumps(request.user.username)),
+        'room': room,
+    }
+
+    return render(request, 'cross_book/room.html', context)
 
 
 @login_required

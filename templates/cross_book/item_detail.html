@@ -59,6 +59,11 @@
             <div class="like-part">
                 {% include 'shared/like.html' %}
             </div>
+            <form action="{% url 'create_room' %}" method="POST">
+                {% csrf_token %}
+                <input name="item_number" type="number" value="{{ item.id }}" style="display: none;">
+                <button type="submit">申請する</button>
+            </form>
         </div>
     </div>
 {% endblock %}

@@ -216,3 +216,19 @@ class Like(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Room(models.Model):
+    timestamp = models.DateTimeField(auto_now=True)
+
+
+class Message(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
+    message = models.CharField(max_length=10000)
+    created_at = models.DateTimeField(default=timezone.now)
+
+
+class UserRoom(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
