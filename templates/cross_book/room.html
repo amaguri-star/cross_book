@@ -13,17 +13,17 @@
                     background-size: 20px 20px;">
         </div>
         <div id="conversation-list">
-            {% for chat_user in chat_user_list %}
+            {% for user_room in user_room_list %}
                 <div class="conversation">
-                    <img src="{{ chat_user.user.image.url }}" alt="">
+                    <img src="{{ user_room.user.image.url }}" alt="">
                     <div class="chat-user-username">
-                        {{ chat_user.user.username }}
+                        {{ user_room.user.username }}
                     </div>
                     <div class="time-log">
                         Apr 14
                     </div>
                     <div class="conversation-message">
-
+                        {{ user_room.user.message_set.1 }}
                     </div>
                 </div>
             {% endfor %}
@@ -33,18 +33,27 @@
         </div>
         <ul id="chat-message-list">
             {% for message in room_messages %}
-                <li class="message-row {% if request.user == message.user %}sent{% else %}replies{% endif %}">
-                    <div class="message-content">
-                        <img src="{{ message.user.image.url }}" alt="ユーザーのアイコン画像">
-                        <div class="message-text">{{ message.message }}</div>
-                        <div class="message-time">{{ message.created_at }}</div>
-                    </div>
-                </li>
+                {% if request.user == message.user %}
+                    <li class="message-row sent">
+                        <div class="message-content">
+                            <div class="message-text">{{ message.message }}</div>
+                            <div class="message-time">{{ message.created_at|date:"H:i" }}</div>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="message-row replies">
+                        <div class="message-content">
+                            <img src="{{ message.user.image.url }}" alt="user-icon">
+                            <div class="message-text">{{ message.message }}</div>
+                            <div class="message-time">{{ message.created_at|date:"H:i" }}</div>
+                        </div>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
         <div id="chat-message-send-form">
-            <div contenteditable="true" id="send-message-area"></div>
-            <button class="fa fa-paper-plane fa-2x message-sent">送信</button>
+            <div contenteditable="true" id="send-message-input-area"></div>
+            <button id="message-sent" class="fa fa-paper-plane fa-2x">送信</button>
         </div>
     </div>
 {% endblock %}
@@ -61,17 +70,15 @@
             + '/'
         )
 
-        document.querySelector('#chat-message-submit').onclick = function sendMessage() {
-            const messageTextAreaDom = document.querySelector('#chat-message-textarea');
-            const message = messageTextAreaDom.value;
-            let textArray = message.split('\n');
-            let newText = textArray.join('<br>');
-            console.log(newText);
+        document.querySelector('#message-sent').onclick = function sendMessage() {
+            const messageTextAreaDom = document.querySelector('#send-message-input-area');
+            console.log(messageTextAreaDom.textContent)
+            const message = messageTextAreaDom.textContent;
             socket.send(JSON.stringify({
                 author: username,
                 message: message,
             }));
-            messageTextAreaDom.value = "";
+            messageTextAreaDom.textContent = "";
         }
 
         socket.onmessage = e => {
@@ -79,14 +86,6 @@
             createMessage(receiveData);
         }
 
-        {#document.querySelector('#chat-message-textarea').focus();#}
-        {#document.querySelector('#chat-message-textarea').onkeyup = function (e) {#}
-        {#   if (e.keyCode === 13) {  // enter, return#}
-        {#       let text = document.querySelector('#chat-message-textarea').value#}
-        {#       let textArray = text.split('\n');#}
-        {#       let newText = textArray.join('<br>');#}
-        {#   }#}
-        {# } #}
 
         socket.onclose = e => {
             console.error('Chat socket closed unexpectedly');
@@ -96,21 +95,27 @@
             console.log(data)
             let author = data['author'];
             let msgListTag = document.createElement('li');
+            let content_divTag = document.createElement('div');
             let imgTag = document.createElement('img');
-            let divTag = document.createElement('div');
-            divTag.textContent = data['message'];
-            console.log(divTag.textContent);
-            console.log(data['message']);
-            imgTag.src = "{{ request.user.image.url }}";
+            let text_divTag = document.createElement('div');
+            let create_at_divTag = document.createElement('div');
+            msgListTag.className = "message-row"
+            content_divTag.className = "message-content";
+            text_divTag.className = "message-text";
+            create_at_divTag.className = "message-time";
+            create_at_divTag.textContent = data['created_at']
+            text_divTag.textContent = data['message'];
             if (author === username) {
-                msgListTag.className = 'sent';
+                msgListTag.className = 'message-row sent';
             } else {
-                msgListTag.className = 'replies';
+                imgTag.src = "{{ other_user.image.url }}";
+                content_divTag.appendChild(imgTag);
+                msgListTag.className = 'message-row replies';
             }
-            msgListTag.appendChild(imgTag);
-            msgListTag.appendChild(divTag);
-            console.log(msgListTag);
-            document.querySelector('#chat-log').appendChild(msgListTag);
+            content_divTag.appendChild(text_divTag);
+            content_divTag.appendChild(create_at_divTag);
+            msgListTag.appendChild(content_divTag);
+            document.querySelector('#chat-message-list').appendChild(msgListTag);
         }
 
 

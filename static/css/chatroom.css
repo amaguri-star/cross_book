@@ -113,9 +113,6 @@
     justify-items: end;
 }
 
-.sent img {
-    display: none;
-}
 
 .replies {
     justify-content: start;
@@ -170,7 +167,7 @@
     padding: 0 50px;
 }
 
-#chat-message-send-form #send-message-area {
+#chat-message-send-form #send-message-input-area {
     border: 2px solid #ddd;
     color: #330;
     border-radius: 6px;
@@ -179,7 +176,7 @@
     padding: 0 30px;
 }
 
-.message-sent {
+#message-sent {
     font-size: 1rem;
     outline: none;
     border: rgba(30, 144, 255, .6) solid 1px;

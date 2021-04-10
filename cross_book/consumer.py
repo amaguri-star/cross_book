@@ -1,7 +1,9 @@
+import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import Room, UserRoom, Message, User
+from django.utils import timezone
 import pdb
 
 
@@ -30,6 +32,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             text_data_json = json.loads(text_data)
             author = text_data_json['author']
+            timestamp_raw = timezone.localtime(timezone.now())
+            date_format = '%H:%M'
+            timestamp = timezone.datetime.strftime(timestamp_raw, date_format)
             message = text_data_json['message']
             await self.createMessage(text_data_json)
             await self.channel_layer.group_send(
@@ -38,6 +43,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'type': 'chat_message',
                     'author': author,
                     'message': message,
+                    'created_at': str(timestamp),
                 }
             )
         except Exception as e:
@@ -47,10 +53,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             author = event['author']
             message = event['message']
+            created_at = event['created_at']
+
             await self.send(text_data=json.dumps({
                 'type': 'chat_message',
                 'author': author,
                 'message': message,
+                'created_at': created_at,
             }))
         except Exception as e:
             raise
@@ -63,7 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             Message.objects.create(
                 user=user,
                 room=room,
-                message=event['message']
+                message=event['message'],
             )
         except Exception as e:
             raise
