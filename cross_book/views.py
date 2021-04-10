@@ -169,20 +169,41 @@ def create_room(request):
     return redirect('chat_room', room.id)
 
 
+def get_users_chat_room_list(request, context):
+    room_list = []
+    user_room_list = UserRoom.objects.filter(user=request.user)
+    other_room_list = UserRoom.objects.exclude(user=request.user)
+    for i in user_room_list:
+        for j in other_room_list:
+            if i.room == j.room:
+                room_list.append(j)
+    context['room_list'] = room_list
+    return context
+
+
+@login_required
+def chat_room_list(request):
+    context = {}
+    context = get_users_chat_room_list(request, context)
+    return render(request, 'cross_book/chat_room_list.html', context)
+
+
 @login_required
 def chat_room(request, room_pk):
+
     room = get_object_or_404(Room, pk=room_pk)
-    user_room_list = room.userroom_set.all().exclude(user=request.user)
-    other_user = user_room_list.filter(room=room)
+    user_room = room.userroom_set.all().exclude(user=request.user)
+    other_user = user_room.filter(room=room)
     room_messages = Message.objects.filter(room=room).order_by('created_at').all()
     context = {
         'room_pk': mark_safe(json.dumps(room_pk)),
         'username': mark_safe(json.dumps(request.user.username)),
         'room_messages': room_messages,
-        'user_room_list': user_room_list,
         'other_user': other_user[0].user,
     }
-    return render(request, 'cross_book/room.html', context)
+    ctx = get_users_chat_room_list(request, context)
+    context.update(ctx)
+    return render(request, 'cross_book/chat_room_list.html', context)
 
 
 @login_required

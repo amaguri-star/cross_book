@@ -13,5 +13,6 @@ urlpatterns = [
     path('likes/', views.likes, name="likes"),
     path('category/<int:pk>/', views.category_page, name="category_page"),
     path('create_room/', views.create_room, name="create_room"),
+    path('chat/', views.chat_room_list, name="chat-room-list"),
     path('chat/<int:room_pk>/', views.chat_room, name="chat_room"),
 ]
