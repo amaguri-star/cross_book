@@ -232,3 +232,4 @@ class Message(models.Model):
 class UserRoom(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)

@@ -172,13 +172,14 @@ def create_room(request):
 @login_required
 def chat_room(request, room_pk):
     room = get_object_or_404(Room, pk=room_pk)
-    room.userroom_set.filter(user=request.user, room=room)
+    room_list = room.userroom_set.filter(room=room).exclude(user=request.user).order_by('timestamp')
+    room_messages = Message.objects.filter(room=room).order_by('created_at').all()
     context = {
         'room_pk': mark_safe(json.dumps(room_pk)),
         'username': mark_safe(json.dumps(request.user.username)),
-        'room': room,
+        'room_messages': room_messages,
+        'chat_user_list': room_list,
     }
-
     return render(request, 'cross_book/room.html', context)
 
 
