@@ -5,7 +5,7 @@
         <div class="form-field-wrapper">
             <h1 class="form-header">ログイン</h1>
             <hr>
-            <form action="" method="POST">
+            <form method="POST">
                 {% csrf_token %}
                 {% for field in form %}
                     {% if field.name == "remember" %}
@@ -25,6 +25,5 @@
             <p>パスワードお忘れの方は<a href="{% url 'account_reset_password' %}">こちら</a></p>
             <p>新規登録をしてない方は<a href="{% url 'account_signup' %}">こちら</a></p>
         </div>
-
     </div>
 {% endblock %}
