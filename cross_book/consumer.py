@@ -2,7 +2,7 @@ import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import Room, UserRoom, Message, User
+from .models import Room, Message, User
 from django.utils import timezone
 import pdb
 

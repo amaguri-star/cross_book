@@ -50,7 +50,7 @@
     right: 0px;
     height: 92vh;
     top: 7vh;
-    background: rgba(238, 238, 238, .5);
+    background: rgba(238, 238, 238, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,6 +58,7 @@
     width: 30%;
     transform: translateX(100%);
     transition: transform 0.5s ease-in;
+    z-index: 100;
 }
 
 .nav-burger-links li {

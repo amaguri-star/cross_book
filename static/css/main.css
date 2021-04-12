@@ -4,6 +4,7 @@
 body {
     font-family: 'Kosugi Maru', sans-serif;
     letter-spacing: 3px;
+    overflow-x: hidden;
 }
 
 .errorlist {

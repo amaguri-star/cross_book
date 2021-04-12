@@ -50,6 +50,15 @@
     grid-area: conversation-list;
 }
 
+.other-user-icon-image {
+    grid-row: 1 / span 2;
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    border: #ff9223 solid 1px;
+    border-radius: 100%;
+}
+
 .conversation {
     display: grid;
     grid-template-columns: 50px 1fr max-content;
@@ -68,13 +77,6 @@
     text-overflow: ellipsis;
 }
 
-.conversation > img {
-    grid-row: 1 / span 2;
-    height: 50px;
-    object-fit: contain;
-    border: #ff9223 solid 1px;
-    border-radius: 100%;
-}
 
 .conversation:hover {
     cursor: pointer;

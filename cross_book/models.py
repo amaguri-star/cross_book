@@ -220,6 +220,7 @@ class Like(models.Model):
 
 class Room(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
+    users = models.ManyToManyField(User)
 
 
 class Message(models.Model):
@@ -227,9 +228,3 @@ class Message(models.Model):
     room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
     message = models.CharField(max_length=10000)
     created_at = models.DateTimeField(default=timezone.now)
-
-
-class UserRoom(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)

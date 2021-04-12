@@ -161,48 +161,50 @@ def category_page(request, pk):
 @login_required
 @require_POST
 def create_room(request):
-    room = Room.objects.create()
     item_num = request.POST.get('item_number')
-    item_user = get_object_or_404(Item, pk=item_num).user
-    UserRoom.objects.create(user=request.user, room=room)
-    UserRoom.objects.create(user=item_user, room=room)
+    chatroom_user1 = request.user
+    chatroom_user2 = get_object_or_404(Item, pk=item_num).user
+    room = Room()
+    room.save()
+    room.users.add(chatroom_user1, chatroom_user2)
     return redirect('chat_room', room.id)
 
 
-def get_users_chat_room_list(request, context):
-    room_list = []
-    user_room_list = UserRoom.objects.filter(user=request.user)
-    other_room_list = UserRoom.objects.exclude(user=request.user)
-    for i in user_room_list:
-        for j in other_room_list:
-            if i.room == j.room:
-                room_list.append(j)
-    context['room_list'] = room_list
+def __get_rooms_and_other_users(request):
+    room_list = request.user.room_set.all()
+    other_users_list = []
+    for room in room_list:
+        other_users_list.append(User.objects.filter(room=room).exclude(username=request.user.username)[0])
+    context = {
+        'room_list': room_list,
+        'other_user_list': other_users_list,
+    }
     return context
 
 
 @login_required
 def chat_room_list(request):
-    context = {}
-    context = get_users_chat_room_list(request, context)
+    context = __get_rooms_and_other_users(request)
     return render(request, 'cross_book/chat_room_list.html', context)
 
 
 @login_required
 def chat_room(request, room_pk):
-
+    context_added = __get_rooms_and_other_users(request)
     room = get_object_or_404(Room, pk=room_pk)
-    user_room = room.userroom_set.all().exclude(user=request.user)
-    other_user = user_room.filter(room=room)
+    users = room.users.all()
+    other_user = ""
+    for user in users:
+        if user != request.user:
+            other_user = user
     room_messages = Message.objects.filter(room=room).order_by('created_at').all()
     context = {
         'room_pk': mark_safe(json.dumps(room_pk)),
         'username': mark_safe(json.dumps(request.user.username)),
         'room_messages': room_messages,
-        'other_user': other_user[0].user,
+        'other_user': other_user,
     }
-    ctx = get_users_chat_room_list(request, context)
-    context.update(ctx)
+    context.update(context_added)
     return render(request, 'cross_book/chat_room_list.html', context)
 
 
