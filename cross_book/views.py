@@ -112,9 +112,11 @@ def sell_page(request):
     return render(request, 'cross_book/sell.html', context)
 
 
+@login_required
 def item_detail(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
+    comments = item.comment_set.all()
     item_liked = item.like_set.filter(user=user)
     item_images = item.image_set.all()
     thumbnail = item.image_set.all()[0]
@@ -123,7 +125,8 @@ def item_detail(request, pk):
         'user': user,
         'item_liked': item_liked,
         'item_images': item_images,
-        'thumbnail': thumbnail
+        'thumbnail': thumbnail,
+        'comments': comments,
     }
     return render(request, 'cross_book/item_detail.html', context)
 
@@ -230,3 +233,5 @@ def likes(request):
 
         if request.is_ajax():
             return JsonResponse(context)
+
+

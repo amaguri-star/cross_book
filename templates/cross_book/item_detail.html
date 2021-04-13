@@ -65,6 +65,17 @@
                 <button type="submit">申請する</button>
             </form>
         </div>
+        <div class="item-comment-part-page">
+            <ul class="comment-log">
+                {% for cmt in comments %}
+                    <li>{{ cmt.comment }}</li>
+                {% endfor %}
+            </ul>
+            <div>
+                <input id="comment-input-area" type="text" placeholder="コメントを残す">
+                <button id="comment-sent" type="submit">送信</button>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block script %}
@@ -108,5 +119,47 @@
                 });
             });
         });
+    </script>
+    <script>
+        let item_pk = {{ item.id }};
+        let username = "{{ user.username }}";
+
+        const socket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/item/'
+            + item_pk
+            + '/'
+        )
+
+        document.querySelector('#comment-sent').onclick = function sendMessage() {
+            const comment = document.querySelector('#comment-input-area');
+            const cmtValue = comment.value;
+            socket.send(JSON.stringify({
+                author: username,
+                comment: cmtValue,
+            }));
+            comment.value = "";
+        }
+
+        socket.onmessage = e => {
+            let receiveData = JSON.parse(e.data);
+            createMessage(receiveData);
+        }
+
+        socket.onclose = e => {
+            console.error('Comment socket closed unexpectedly');
+        }
+
+        function createMessage(data) {
+            let author = data['author'];
+            let comment = data['comment'];
+            let created_at = data['created_at']
+            let listTag = document.createElement('li');
+            let divTag = document.createElement('div');
+            divTag.textContent = data['comment']
+            listTag.appendChild(divTag)
+            document.querySelector('.comment-log').appendChild(listTag)
+        }
     </script>
 {% endblock %}

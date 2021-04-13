@@ -226,5 +226,12 @@ class Room(models.Model):
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
-    message = models.CharField(max_length=10000)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=timezone.now)
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    comment = models.TextField(verbose_name="コメント", max_length="1000")
     created_at = models.DateTimeField(default=timezone.now)
