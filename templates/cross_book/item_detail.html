@@ -59,10 +59,14 @@
             <div class="like-part">
                 {% include 'shared/like.html' %}
             </div>
-            <form action="{% url 'create_room' %}" method="POST">
+            <form action="{% url 'request_item' %}" method="POST">
                 {% csrf_token %}
-                <input name="item_number" type="number" value="{{ item.id }}" style="display: none;">
-                <button type="submit">申請する</button>
+                {% if requested %}
+                    <button id="request_item_button" type="submit">取引済み</button>
+                {% else %}
+                    <button id="request_item_button" type="submit">取引申請する</button>
+                {% endif %}
+
             </form>
         </div>
         <div class="item-comment-part-page">
@@ -101,7 +105,7 @@
                     type: 'POST',
                     url: "{% url 'likes' %}",
                     data: {
-                        'item_id': $(this).attr('name'),
+                        'item_pk': '{{ item.id }}',
                         'csrfmiddlewaretoken': '{{ csrf_token }}',
                     },
                     dataType: 'json',
@@ -115,6 +119,30 @@
                         }
                         selector2 = document.getElementsByName(response.item_id + "-count");
                         $(selector2).text(response.count);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#request_item_button', function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'request_item' %}",
+                    data: {
+                        'item_pk': '{{ item.id }}',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        request_item_button = document.querySelector('#request_item_button');
+                        if (response.requested) {
+                            request_item_button.textContent = "申請済み";
+                        } else {
+                            request_item_button.textContent = "取引申請する";
+                        }
                     }
                 });
             });

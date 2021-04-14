@@ -120,6 +120,8 @@ def item_detail(request, pk):
     item_liked = item.like_set.filter(user=user)
     item_images = item.image_set.all()
     thumbnail = item.image_set.all()[0]
+    requested = user.request_set.filter(receiver_item=item).first()
+
     context = {
         'item': item,
         'user': user,
@@ -127,6 +129,7 @@ def item_detail(request, pk):
         'item_images': item_images,
         'thumbnail': thumbnail,
         'comments': comments,
+        'requested': requested
     }
     return render(request, 'cross_book/item_detail.html', context)
 
@@ -161,16 +164,16 @@ def category_page(request, pk):
     return render(request, 'cross_book/category_page.html', context)
 
 
-@login_required
-@require_POST
-def create_room(request):
-    item_num = request.POST.get('item_number')
-    chatroom_user1 = request.user
-    chatroom_user2 = get_object_or_404(Item, pk=item_num).user
-    room = Room()
-    room.save()
-    room.users.add(chatroom_user1, chatroom_user2)
-    return redirect('chat_room', room.id)
+# @login_required
+# @require_POST
+# def create_room(request):
+#     item_num = request.POST.get('item_number')
+#     chatroom_user1 = request.user
+#     chatroom_user2 = get_object_or_404(Item, pk=item_num).user
+#     room = Room()
+#     room.save()
+#     room.users.add(chatroom_user1, chatroom_user2)
+#     return redirect('chat_room', room.id)
 
 
 def __get_rooms_and_other_users(request):
@@ -212,26 +215,45 @@ def chat_room(request, room_pk):
 
 
 @login_required
+@require_POST
 def likes(request):
-    if request.method == 'POST':
-        item = get_object_or_404(Item, pk=request.POST.get('item_id'))
-        user = request.user
-        liked = False
-        like = Like.objects.filter(item=item, user=user)
+    item = get_object_or_404(Item, id=request.POST.get('item_pk'))
+    user = request.user
+    liked = False
+    like = Like.objects.filter(item=item, user=user)
 
-        if like.exists():
-            like.delete()
-        else:
-            like.create(item=item, user=user)
-            liked = True
+    if like.exists():
+        like.delete()
+    else:
+        like.create(item=item, user=user)
+        liked = True
 
-        context = {
-            'item_id': item.id,
-            'liked': liked,
-            'count': item.like_set.count(),
-        }
-
-        if request.is_ajax():
-            return JsonResponse(context)
+    context = {
+        'item_id': item.id,
+        'liked': liked,
+        'count': item.like_set.count(),
+    }
+    if request.is_ajax():
+        return JsonResponse(context)
 
 
+@login_required
+@require_POST
+def request_item(request):
+    user = request.user
+    item = get_object_or_404(Item, id=request.POST.get('item_pk'))
+    requested = False
+    user_request = Request.objects.filter(sender=user, receiver_item=item).first()
+
+    if user_request:
+        user_request.delete()
+    else:
+        Request.objects.create(sender=user, receiver_item=item)
+        requested = True
+
+    context = {
+        'requested': requested,
+    }
+
+    if request.is_ajax():
+        return JsonResponse(context)

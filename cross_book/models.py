@@ -194,6 +194,16 @@ class Item(models.Model):
         return f'{self.user.username}\'s {self.name}'
 
 
+class Request(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiver_item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.sender} request to {self.receiver_item.name}'
+
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
 
@@ -211,16 +221,25 @@ class Image(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     image = models.ImageField(verbose_name="画像", upload_to=get_image_filename)
 
+    def __str__(self):
+        return f'{self.item.name}\'s image'
+
 
 class Like(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.user.username} liked {self.item.name}'
+
 
 class Room(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     users = models.ManyToManyField(User)
+
+    # def __str__(self):
+    #     return self
 
 
 class Message(models.Model):
@@ -229,9 +248,16 @@ class Message(models.Model):
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return f'{self.message}'
+
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     comment = models.TextField(verbose_name="コメント", max_length="1000")
     created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.comment}'
+
