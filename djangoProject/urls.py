@@ -9,7 +9,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', include('cross_book.urls')),
     path('inbox/notifications/', include(notifications.urls, namespace='notifications'))
-
 ]
 
 if settings.DEBUG:

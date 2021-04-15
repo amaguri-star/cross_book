@@ -11,8 +11,20 @@
                     </i>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        {% for noti in request.user.notifications.unread %}
-                        <a class="dropdown-item" href="#">{{ noti.description }}</a>
+                        {% for notify in request.user.notifications.unread %}
+                            <div class="notify-content">
+                                <div class="notify-content-message">
+                                    <a href="{% url 'my_page' notify.actor.id %}">
+                                        <img class="notify-content-user-image-icon" src="{{ notify.actor.image.url }}"
+                                             alt="user-icon">
+                                    </a>
+                                    <a href="{% url 'item_detail' notify.data.parent_id %}">
+                                        <div class="notify-content-message-text">
+                                            がコメントしました。
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>

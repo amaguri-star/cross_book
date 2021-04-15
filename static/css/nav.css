@@ -31,6 +31,17 @@
     border: rgba(0, 0, 0, .3) solid 2px;
 }
 
+.notify-content {
+    display: grid;
+}
+
+.notify-content-user-image-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
 .burger {
     display: none;
     cursor: pointer;
