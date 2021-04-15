@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_boost',
     'django_notification_system',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -176,5 +177,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
-
+# 通知設定許可
+DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}
 
