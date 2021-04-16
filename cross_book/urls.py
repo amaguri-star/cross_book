@@ -15,5 +15,5 @@ urlpatterns = [
     path('chat/', views.chat_room_list, name="chat-room-list"),
     path('chat/<int:room_pk>/', views.chat_room, name="chat_room"),
     path('likes/', views.likes, name="likes"),
-    path('request/item/', views.request_item, name="request_item"),
+    path('transaction_request/item/', views.request_item, name="transaction_request_item"),
 ]

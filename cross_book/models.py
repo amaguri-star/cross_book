@@ -194,14 +194,14 @@ class Item(models.Model):
         return f'{self.user.username}\'s {self.name}'
 
 
-class Request(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    receiver_item = models.ForeignKey(Item, on_delete=models.CASCADE)
+class TransactionRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.sender} request to {self.receiver_item.name}'
+        return f'{self.user} request to {self.item.name}'
 
 
 class Category(models.Model):

@@ -11,26 +11,27 @@
                     </i>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        {% for notify in request.user.notifications.unread %}
+                        {% for notify in request.user.notifications.all %}
                             <div class="notify-content">
-                                <div class="notify-content-message">
-                                    <a href="{% url 'my_page' notify.actor.id %}">
-                                        <img class="notify-content-user-image-icon" src="{{ notify.actor.image.url }}"
-                                             alt="user-icon">
-                                    </a>
-                                    <a href="{% url 'item_detail' notify.data.parent_id %}">
-                                        <div class="notify-content-message-text">
-                                            がコメントしました。
-                                        </div>
-                                    </a>
-                                </div>
+                                <a class="notify-content-user-profile-link-area"
+                                   href="{% url 'my_page' notify.actor.id %}">
+                                    <img class="notify-content-user-image-icon" src="{{ notify.actor.image.url }}"
+                                         alt="user-icon">
+                                </a>
+                                <a class="notify-content-user-item-link-area"
+                                   href="{% url 'item_detail' notify.target.id %}">
+                                    <p class="notify-content-text">{{ notify.description }}</p>
+                                    <img class="notify-content-item-image"
+                                         src="{{ notify.target.image_set.all.0.image.url }}"
+                                         alt="item-image">
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
             </li>
             <li><a class="far fa-comment fa-2x" href="{% url 'chat-room-list' %}"></a></li>
-            <li><a href="{% url 'my_page' request.user.id %}"><img width="40" height="40"
+            <li><a href="{% url 'my_page' request.user.id %}"><img class="navbar-user-icon-image" width="40" height="40"
                                                                    src="{{ request.user.image.url }}"
                                                                    alt=""></a></li>
         </ul>

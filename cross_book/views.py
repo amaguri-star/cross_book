@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from django import forms
 import json
+from notifications.signals import notify
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import *
 from .decorators import *
@@ -120,7 +121,7 @@ def item_detail(request, pk):
     item_liked = item.like_set.filter(user=user)
     item_images = item.image_set.all()
     thumbnail = item.image_set.all()[0]
-    requested = user.request_set.filter(receiver_item=item).first()
+    requested = user.transactionrequest_set.filter(item=item).first()
 
     context = {
         'item': item,
@@ -243,12 +244,14 @@ def request_item(request):
     user = request.user
     item = get_object_or_404(Item, id=request.POST.get('item_pk'))
     requested = False
-    user_request = Request.objects.filter(sender=user, receiver_item=item).first()
+    user_request = TransactionRequest.objects.filter(user=user, item=item).first()
 
     if user_request:
         user_request.delete()
     else:
-        Request.objects.create(sender=user, receiver_item=item)
+        tran_req = TransactionRequest.objects.create(user=user, item=item)
+        notify.send(tran_req.user, recipient=tran_req.item.user, verb="transaction-request-notify",
+                    target=tran_req.item, description="が取引申請しました。", timestamp=timezone.now())
         requested = True
 
     context = {
