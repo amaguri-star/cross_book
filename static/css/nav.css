@@ -48,6 +48,7 @@
         'user-image notify-content-user-item-link-area';
 }
 
+
 .notify-content-user-profile-link-area {
     grid-area: user-image;
 }
@@ -55,11 +56,15 @@
 .notify-content-user-item-link-area {
     grid-area: notify-content-user-item-link-area;
     display: grid;
-    grid-template-rows: 30px 10px;
+    grid-template-rows: 25px 15px;
     grid-template-columns: 1fr 40px;
     grid-template-areas:
-        'notify-contnet-text notify-item-image'
-        'notify-content-time-minutea-age notify-item-image';
+        'notify-content-text notify-item-image'
+        'notify-content-time-minute-ago notify-item-image';
+}
+
+.notify-content-text {
+    grid-area: notify-content-text;
 }
 
 .notify-content-user-image-icon {
@@ -67,6 +72,13 @@
     height: 40px;
     border-radius: 50%;
     object-fit: contain;
+}
+
+.notify-content-time-minute-ago {
+    grid-area: notify-content-time-minute-ago;
+    color: rgba(0, 0, 0, .3);
+    justify-self: end;
+    align-self: end;
 }
 
 .notify-content-item-image {

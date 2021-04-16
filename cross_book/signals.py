@@ -1,8 +1,8 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from notifications.signals import notify
 from django.dispatch import receiver
 from django.utils import timezone
-from .models import Address, User, Comment, TransactionRequest, Like
+from .models import Address, User, Comment, Like
 
 
 @receiver(post_save, sender=User)

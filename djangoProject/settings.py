@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.humanize',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'django_boost',
     'django_notification_system',
     'notifications',
+    'timeago',
 ]
 
 MIDDLEWARE = [
@@ -145,7 +147,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR, 'static'
+    BASE_DIR, 'static',
+    BASE_DIR, 'node_modules',
 ]
 
 MEDIA_URL = '/media/'
@@ -160,7 +163,7 @@ ACCOUNT_USERNAME_REQUIRED = True
 
 # サインアップにメールアドレス確認をはさむよう瀬底
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_EMAIL_REQUIRED = True   # ユーザ登録にメルアド必須にする
+ACCOUNT_EMAIL_REQUIRED = True  # ユーザ登録にメルアド必須にする
 
 # ログイン・ログアウト時のリダイレクト先
 LOGIN_REDIRECT_URL = 'home'
@@ -168,7 +171,6 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
 
 # ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -178,5 +180,5 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # 通知設定許可
-DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True,
-                                'SOFT_DELETE': True}
+DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True,
+'SOFT_DELETE': True}

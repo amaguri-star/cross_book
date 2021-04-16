@@ -21,6 +21,7 @@
                                 <a class="notify-content-user-item-link-area"
                                    href="{% url 'item_detail' notify.target.id %}">
                                     <p class="notify-content-text">{{ notify.description }}</p>
+                                    <div class="notify-content-time-minute-ago">{{ notify.timestamp|timesince }}</div>
                                     <img class="notify-content-item-image"
                                          src="{{ notify.target.image_set.all.0.image.url }}"
                                          alt="item-image">
