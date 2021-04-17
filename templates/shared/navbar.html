@@ -1,3 +1,4 @@
+{% load custom_tags %}
 <nav id="nav-bar">
     <h1 id="nav-bar-header"><a href="{% url 'home' %}">CROSS-BOOK.</a></h1>
     {% if request.user.is_authenticated %}
@@ -21,7 +22,7 @@
                                 <a class="notify-content-user-item-link-area"
                                    href="{% url 'item_detail' notify.target.id %}">
                                     <p class="notify-content-text">{{ notify.description }}</p>
-                                    <div class="notify-content-time-minute-ago">{{ notify.timestamp|timesince }}</div>
+                                    <div class="notify-content-time-minute-ago">{{ notify.timestamp|timesince|split_timesince:"," }}前</div>
                                     <img class="notify-content-item-image"
                                          src="{{ notify.target.image_set.all.0.image.url }}"
                                          alt="item-image">
