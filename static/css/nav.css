@@ -25,6 +25,28 @@
     margin-left: 15px;
 }
 
+.notification-link {
+    position: relative;
+}
+
+.unread-message-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 21px;
+    width: 21px;
+    font-size: 13px;
+    border: white solid 1px;
+}
+
+
 .navbar-user-icon-image {
     object-fit: contain;
     border-radius: 100%;
@@ -47,6 +69,7 @@
     grid-template-areas:
         'user-image notify-content-user-item-link-area';
 }
+
 
 
 .notify-content-user-profile-link-area {
