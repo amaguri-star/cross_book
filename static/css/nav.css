@@ -29,7 +29,7 @@
     position: relative;
 }
 
-.unread-message-count {
+.live_notify_badge {
     position: absolute;
     top: -5px;
     right: -5px;
