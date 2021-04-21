@@ -10,6 +10,7 @@ from notifications.signals import notify
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import *
 from .decorators import *
+from .api.viewsets import *
 import pdb
 
 

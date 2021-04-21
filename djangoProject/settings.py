@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_notification_system',
     'notifications',
     'timeago',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
