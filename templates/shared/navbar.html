@@ -1,9 +1,5 @@
 {% load static %}
 {% load custom_tags %}
-{% load notifications_tags %}
-<script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
-{% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
-{% notifications_unread as unread_count %}
 <nav id="nav-bar">
     <h1 id="nav-bar-header"><a href="{% url 'home' %}">CROSS-BOOK.</a></h1>
     {% if request.user.is_authenticated %}
@@ -34,7 +30,6 @@
                         {% endfor %}
                     </div>
                 </div>
-                {% live_notify_badge %}
             </li>
             <li><a class="far fa-comment fa-2x" href="{% url 'chat-room-list' %}"></a></li>
             <li><a href="{% url 'my_page' request.user.id %}"><img class="navbar-user-icon-image" width="40" height="40"
