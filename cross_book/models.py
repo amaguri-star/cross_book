@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 # from django.conf import settings
 from django.template.defaultfilters import slugify
+
+
 
 
 # from .validators import *
@@ -261,3 +265,27 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.comment}'
 
+
+class Notification(models.Model):
+
+    NOTIFI_TYPE = (
+        ('comment', 'comment'),
+        ('like', 'like'),
+        ('transaction_request', 'transaction_request')
+    )
+
+    sender = models.ForeignKey(User, related_name='notify_sender', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='notify_recipient', on_delete=models.CASCADE)
+    type = models.CharField(max_length=255, choices=NOTIFI_TYPE)
+    description = models.CharField(max_length=255)
+    target_content_type = models.ForeignKey(
+        ContentType,
+        related_name='notify_target',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
+    )
+    target_object_id = models.PositiveIntegerField()
+    target = GenericForeignKey('target_content_type', 'target_object_id')
+    new_message = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(default=timezone.now)

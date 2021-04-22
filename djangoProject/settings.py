@@ -47,9 +47,6 @@ INSTALLED_APPS = [
     'bootstrap4',
     'widget_tweaks',
     'django_boost',
-    'django_notification_system',
-    'notifications',
-    'timeago',
     'rest_framework',
 ]
 

@@ -6,9 +6,10 @@ import notifications.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
     path('', include('cross_book.urls')),
-    path('inbox/notifications/', include(notifications.urls, namespace='notifications'))
+    path('api/', include('cross_book.api.urls')),
+    path('accounts/', include('allauth.urls')),
+    # path('inbox/notifications/', include(notifications.urls, namespace='notifications'))
 ]
 
 if settings.DEBUG:
