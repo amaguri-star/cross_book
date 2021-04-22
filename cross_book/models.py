@@ -274,7 +274,7 @@ class Notification(models.Model):
         ('transaction_request', 'transaction_request')
     )
 
-    sender = models.ForeignKey(User, related_name='notify_sender', on_delete=models.CASCADE)
+    actor = models.ForeignKey(User, related_name='notify_actor', on_delete=models.CASCADE, null=True)
     recipient = models.ForeignKey(User, related_name='notify_recipient', on_delete=models.CASCADE)
     type = models.CharField(max_length=255, choices=NOTIFI_TYPE)
     description = models.CharField(max_length=255)
@@ -289,3 +289,6 @@ class Notification(models.Model):
     target = GenericForeignKey('target_content_type', 'target_object_id')
     new_message = models.BooleanField(default=True)
     timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.actor} {self.description}'

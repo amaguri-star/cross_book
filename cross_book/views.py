@@ -251,8 +251,6 @@ def request_item(request):
         user_request.delete()
     else:
         tran_req = TransactionRequest.objects.create(user=user, item=item)
-        notify.send(tran_req.user, recipient=tran_req.item.user, verb="transaction-request-notify",
-                    target=tran_req.item, description="が取引申請しました。", timestamp=timezone.now())
         requested = True
 
     context = {

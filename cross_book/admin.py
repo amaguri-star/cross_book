@@ -5,7 +5,6 @@ from .forms import MyUserCreationForm, MyUserChangeForm
 from .models import *
 
 
-# Register your models here.
 class MyUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password', 'image', 'profile_text')}),
@@ -37,3 +36,5 @@ admin.site.register(Category)
 admin.site.register(Room)
 admin.site.register(Message)
 admin.site.register(TransactionRequest)
+admin.site.register(Notification)
+

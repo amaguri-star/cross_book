@@ -1,8 +1,8 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from notifications.signals import notify
-from django.dispatch import receiver
+from django.dispatch import receiver, Signal
 from django.utils import timezone
-from .models import Address, User, Comment, Like
+from .models import Address, User, Comment, Like, Notification, TransactionRequest
 
 
 @receiver(post_save, sender=User)
@@ -16,21 +16,24 @@ def save_address(sender, instance, **kwargs):
     instance.address.save()
 
 
-# def send_user_request_notify(sender, instance, created, *args, **kwargs):
-#     notify.send(instance.user, recipient=instance.item.user, verb="user-request-notify",
-#                 target=instance.item, description="が取引申請しました", timestamp=timezone.now())
-#
-#
-# pre_save.connect(send_user_request_notify, sender=TransactionRequest)
-
-
 @receiver(post_save, sender=Comment)
-def send_comment_notify(sender, instance, *args, **kwargs):
-    notify.send(instance.user, recipient=instance.item.user, verb="comment-notify", target=instance.item,
-                description="がコメントしました。", timestamp=timezone.now())
+def send_comment_notify(sender, instance, created, *args, **kwargs):
+    if created:
+        Notification.objects.create(actor=instance.user, recipient=instance.item.user, type="comment",
+                                    description="がコメントしました。", target=instance.item)
+
+
+@receiver(post_save, sender=TransactionRequest)
+def send_transaction_request_notify(sender, instance, created, *args, **kwargs):
+    if created:
+        Notification.objects.create(actor=instance.user, recipient=instance.item.user, type="transaction_request",
+                                    description="が取引申請しました。", target=instance.item)
+    else:
+        instance.delete()
 
 
 @receiver(post_save, sender=Like)
-def send_user_request_notify(sender, instance, *args, **kwargs):
-    notify.send(instance.user, recipient=instance.item.user, verb="user-like-notify", target=instance.item,
-                description="がいいねしました", timestamp=timezone.now())
+def send_like_notify(sender, instance, created, *args, **kwargs):
+    if created:
+        Notification.objects.create(actor=instance.user, recipient=instance.item.user, type="like",
+                                    description="がいいねしました。", target=instance.item)
