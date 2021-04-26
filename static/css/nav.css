@@ -25,6 +25,17 @@
     margin-left: 15px;
 }
 
+.unread_notification::before {
+    position: relative;
+    top: -35px;
+    left: -15px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff9223;
+    border-radius: 100%;
+    content: "";
+}
+
 .notification-link {
     position: relative;
 }
@@ -37,7 +48,7 @@
     border-radius: 50%;
     text-align: center;
     color: #fff;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     height: 21px;
@@ -63,7 +74,7 @@
 .notify-content {
     display: grid;
     grid-template-rows: 40px;
-    grid-template-columns: 40px 1fr ;
+    grid-template-columns: 40px 1fr;
     gap: 10px;
     margin-bottom: 10px;
     grid-template-areas:
@@ -71,9 +82,9 @@
 }
 
 
-
 .notify-content-user-profile-link-area {
     grid-area: user-image;
+    grid-row: 1 / 2;
 }
 
 .notify-content-user-item-link-area {
@@ -106,6 +117,7 @@
 
 .notify-content-item-image {
     grid-area: notify-item-image;
+    grid-row: 1 / 2;
     justify-self: center;
     height: 40px;
     object-fit: contain;

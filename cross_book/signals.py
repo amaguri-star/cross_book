@@ -28,8 +28,6 @@ def send_transaction_request_notify(sender, instance, created, *args, **kwargs):
     if created:
         Notification.objects.create(actor=instance.user, recipient=instance.item.user, type="transaction_request",
                                     description="が取引申請しました。", target=instance.item)
-    else:
-        instance.delete()
 
 
 @receiver(post_save, sender=Like)

@@ -288,6 +288,7 @@ class Notification(models.Model):
     target_object_id = models.PositiveIntegerField()
     target = GenericForeignKey('target_content_type', 'target_object_id')
     new_message = models.BooleanField(default=True)
+    unread = models.BooleanField(default=True)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

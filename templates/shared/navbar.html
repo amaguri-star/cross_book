@@ -6,13 +6,14 @@
         <ul class="nav-links">
             <li><a class="fas fa-pen fa-2x" href="{% url 'sell' %}"></a></li>
             <li class="notification-link">
-                <div class="dropdown">
+                <div id="dropdown_id" class="dropdown">
                     <i class="far fa-bell fa-2x" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false"></i>
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <div id="dropdown-menu_id" class="dropdown-menu dropdown-menu-right"
+                         aria-labelledby="dropdownMenuLink">
                         {% for notify in request.user.notify_recipient.all|order_by:"-timestamp" %}
-                            <div class="notify-content">
+                            <div class="notify-content{% if notify.unread == True %} unread_notification{% endif %}">
                                 <a class="notify-content-user-profile-link-area"
                                    href="{% url 'my_page' notify.actor.id %}">
                                     <img class="notify-content-user-image-icon" src="{{ notify.actor.image.url }}"
@@ -30,7 +31,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <span class="new_message_count">{{ request.user.notify_recipient.count }}</span>
+                <span id="unread_notify_count_id" class="new_message_count"></span>
             </li>
             <li><a class="far fa-comment fa-2x" href="{% url 'chat-room-list' %}"></a></li>
             <li><a href="{% url 'my_page' request.user.id %}"><img class="navbar-user-icon-image" width="40" height="40"
@@ -56,3 +57,101 @@
         </ul>
     {% endif %}
 </nav>
+<script>
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    let dropdown = document.getElementById('dropdown_id');
+    dropdown.addEventListener('click', function () {
+        let url = 'http://127.0.0.1:8000/api/read-notify/'
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            }
+        }).then(function (resp) {
+            unread_elements = document.getElementsByClassName('unread-notification')
+            document.getElementById('unread_notify_count_id').style.display = 'none';
+            for (i = 0; i < unread_elements.length; i++) {
+                unread_elements[i].classList.remove('unread_notification')
+            }
+        })
+
+    })
+
+    function fetch_api_get_unread_notify_count() {
+        let url = 'http://127.0.0.1:8000/api/unread-notify-count/';
+        fetch(url)
+            .then((resp) => resp.json())
+            .then(function (data) {
+                unread_count_el = document.getElementById('unread_notify_count_id')
+                if (data.unread_count === 0) {
+                    unread_count_el.style.display = "none";
+                } else {
+                    unread_count_el.style.display = "block";
+                    unread_count_el.textContent = data.unread_count;
+                }
+            })
+    }
+
+    function fetch_api_get_new_notify() {
+        let url = 'http://127.0.0.1:8000/api/new-notify-list/';
+        fetch(url)
+            .then((resp) => resp.json())
+            .then(function (data) {
+                if (data.new_notify_count !== 0) {
+                    for (let i = 0; i < data.new_notify_count; i++) {
+                        let user_link_url = `/mypage/${data.serializer_data[i].actor}`;
+                        let user_image_url = data.user_image_url_list[i];
+                        let item_link_url = `/item/${data.serializer_data[i].target_object_id}`;
+                        let item_image_url = data.item_image_url_list[i];
+                        let description = data.serializer_data[i].description;
+                        let timestamp = data.serializer_data[i].timestamp
+
+                        item_html = `<div class="notify-content unread-notification">
+                                <a class="notify-content-user-profile-link-area"
+                                   href="${user_link_url}">
+                                    <img class="notify-content-user-image-icon" src="${user_image_url}"
+                                         alt="user-icon">
+                                </a>
+                                <a class="notify-content-user-item-link-area"
+                                   href="${item_link_url}">
+                                    <p class="notify-content-text">${description}</p>
+                                    <div class="notify-content-time-minute-ago">${timestamp}前</div>
+                                    <img class="notify-content-item-image"
+                                         src="${item_image_url}"
+                                         alt="item-image">
+                                </a>
+                            </div>`
+
+                        document.getElementById('dropdown-menu_id').innerHTML =
+                            item_html + document.getElementById('dropdown-menu_id').innerHTML;
+                    }
+                }
+            })
+    }
+
+
+    fetch_api_get_new_notify()
+    fetch_api_get_unread_notify_count()
+    setInterval(fetch_api_get_new_notify, 5000)
+    setInterval(fetch_api_get_unread_notify_count, 5000)
+
+</script>

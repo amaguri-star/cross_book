@@ -35,6 +35,7 @@ admin.site.register(Like)
 admin.site.register(Category)
 admin.site.register(Room)
 admin.site.register(Message)
+admin.site.register(Comment)
 admin.site.register(TransactionRequest)
 admin.site.register(Notification)
 
