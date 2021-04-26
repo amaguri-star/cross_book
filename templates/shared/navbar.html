@@ -13,7 +13,7 @@
                     <div id="dropdown-menu_id" class="dropdown-menu dropdown-menu-right"
                          aria-labelledby="dropdownMenuLink">
                         {% for notify in request.user.notify_recipient.all|order_by:"-timestamp" %}
-                            <div class="notify-content{% if notify.unread == True %} unread_notification{% endif %}">
+                            <div class="notify-content{% if notify.unread == True %} unread-notification{% endif %}">
                                 <a class="notify-content-user-profile-link-area"
                                    href="{% url 'my_page' notify.actor.id %}">
                                     <img class="notify-content-user-image-icon" src="{{ notify.actor.image.url }}"
@@ -21,8 +21,10 @@
                                 </a>
                                 <a class="notify-content-user-item-link-area"
                                    href="{% url 'item_detail' notify.target.id %}">
-                                    <p class="notify-content-text">{{ notify.description }}</p>
-                                    <div class="notify-content-time-minute-ago">{{ notify.timestamp|timesince|split_timesince:"," }}前</div>
+                                    <div class="notify-content-message-area">
+                                        <p class="notify-content-text">{{ notify.description }}</p>
+                                        <div class="notify-content-time-minute-ago">{{ notify.timestamp|timesince|split_timesince:"," }}前</div>
+                                    </div>
                                     <img class="notify-content-item-image"
                                          src="{{ notify.target.image_set.all.0.image.url }}"
                                          alt="item-image">
@@ -90,7 +92,7 @@
             unread_elements = document.getElementsByClassName('unread-notification')
             document.getElementById('unread_notify_count_id').style.display = 'none';
             for (i = 0; i < unread_elements.length; i++) {
-                unread_elements[i].classList.remove('unread_notification')
+                unread_elements[i].classList.remove('unread-notification')
             }
         })
 
@@ -133,8 +135,10 @@
                                 </a>
                                 <a class="notify-content-user-item-link-area"
                                    href="${item_link_url}">
-                                    <p class="notify-content-text">${description}</p>
-                                    <div class="notify-content-time-minute-ago">${timestamp}前</div>
+                                    <div class="notify-content-message-area">
+                                        <p class="notify-content-text">${description}</p>
+                                        <div class="notify-content-time-minute-ago">3分前</div>
+                                    </div>
                                     <img class="notify-content-item-image"
                                          src="${item_image_url}"
                                          alt="item-image">
