@@ -5,7 +5,7 @@
     {% if request.user.is_authenticated %}
         <ul class="nav-links">
             <li><a class="fas fa-pen fa-2x" href="{% url 'sell' %}"></a></li>
-            <li class="notification-link">
+            <li id="notification_link_id" class="notification-link">
                 <div id="dropdown_id" class="dropdown">
                     <i class="far fa-bell fa-2x" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false"></i>
@@ -79,24 +79,25 @@
 
     const csrftoken = getCookie('csrftoken');
 
-    let dropdown = document.getElementById('dropdown_id');
-    dropdown.addEventListener('click', function () {
-        let url = 'http://127.0.0.1:8000/api/read-notify/'
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            }
-        }).then(function (resp) {
+    function fetch_api_read_new_notifications() {
+        const notifilink = document.getElementById('dropdownMenuLink');
+        notifilink.addEventListener('click', function (event) {
+            console.log('click')
             unread_elements = document.getElementsByClassName('unread-notification')
             document.getElementById('unread_notify_count_id').style.display = 'none';
-            for (i = 0; i < unread_elements.length; i++) {
-                unread_elements[i].classList.remove('unread-notification')
-            }
+            let url = 'http://127.0.0.1:8000/api/read-notify/';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                }
+             })
+                .catch((error) => {
+                console.error(error);
+             })
         })
-
-    })
+    }
 
     function fetch_api_get_unread_notify_count() {
         let url = 'http://127.0.0.1:8000/api/unread-notify-count/';
@@ -104,9 +105,7 @@
             .then((resp) => resp.json())
             .then(function (data) {
                 unread_count_el = document.getElementById('unread_notify_count_id')
-                if (data.unread_count === 0) {
-                    unread_count_el.style.display = "none";
-                } else {
+                if (data.unread_count > 0) {
                     unread_count_el.style.display = "block";
                     unread_count_el.textContent = data.unread_count;
                 }
@@ -118,7 +117,7 @@
         fetch(url)
             .then((resp) => resp.json())
             .then(function (data) {
-                if (data.new_notify_count !== 0) {
+                if (data.new_notify_count > 0) {
                     for (let i = 0; i < data.new_notify_count; i++) {
                         let user_link_url = `/mypage/${data.serializer_data[i].actor}`;
                         let user_image_url = data.user_image_url_list[i];
@@ -155,7 +154,8 @@
 
     fetch_api_get_new_notify()
     fetch_api_get_unread_notify_count()
-    setInterval(fetch_api_get_new_notify, 5000)
-    setInterval(fetch_api_get_unread_notify_count, 5000)
+    setInterval(fetch_api_get_new_notify, 10000)
+    setInterval(fetch_api_get_unread_notify_count, 10000)
+    fetch_api_read_new_notifications()
 
 </script>

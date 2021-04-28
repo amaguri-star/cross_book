@@ -45,4 +45,4 @@ def read_notify(request):
     for obj in unread_objs:
         obj.unread = False
         obj.save()
-    return Response()
+    return JsonResponse('success', safe=False)
