@@ -259,3 +259,10 @@ def request_item(request):
 
     if request.is_ajax():
         return JsonResponse(context)
+
+
+def view_all_request(request):
+    user = request.user
+    all_request_for_item = TransactionRequest.objects.filter(item__user=user)
+    context = {'all_request_for_item': all_request_for_item}
+    return render(request, 'cross_book/all_request.html', context)

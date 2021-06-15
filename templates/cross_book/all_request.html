@@ -1,0 +1,31 @@
+{% extends 'shared/base.html' %}
+{% block title %}取引申請者一覧{% endblock %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "css/transaction_requests.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="all_request_content">
+        {% for user in all_request_for_item %}
+            <div class="request-user-for-item">
+                <a class="request-user-for-item_image-outer" href="{% url 'my_page' user.user_id %}">
+                    <img class="request-user-for-item_image" src="{{ user.user.image.url }}" alt="ユーザーのプロフィール画像">
+                </a>
+                <div class="request-user-for-item_username-and-link-content">
+                    <p class="request-user-for-item_username">{{ user.user.username }}</p>
+                    <a class="request-user-for-item_user-profile-link"
+                       href="{% url 'my_page' user.user_id %}">出品一覧を見る</a>
+                </div>
+                <div class="request-user-for-item_forms">
+                    <form class="request-user-for-item_form" action="">
+                        <button class="request-user-for-item_button">承認</button>
+                    </form>
+                    <form class="request-user-for-item_form" action="">
+                        <button class="request-user-for-item_button">拒否</button>
+                    </form>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
