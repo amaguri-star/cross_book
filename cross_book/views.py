@@ -122,7 +122,7 @@ def item_detail(request, pk):
     item_liked = item.like_set.filter(user=user)
     item_images = item.image_set.all()
     thumbnail = item.image_set.all()[0]
-    requested = user.transactionrequest_set.filter(item=item).first()
+    requested = user.traderequest_set.filter(item=item).first()
 
     context = {
         'item': item,
@@ -178,42 +178,42 @@ def category_page(request, pk):
 #     return redirect('chat_room', room.id)
 
 
-def __get_rooms_and_other_users(request):
-    room_list = request.user.room_set.all()
-    other_users_list = []
-    for room in room_list:
-        other_users_list.append(User.objects.filter(room=room).exclude(username=request.user.username)[0])
-    context = {
-        'room_list': room_list,
-        'other_user_list': other_users_list,
-    }
-    return context
+# def __get_rooms_and_other_users(request):
+#     room_list = request.user.trade_set.all()
+#     other_users_list = []
+#     for room in room_list:
+#         other_users_list.append(User.objects.filter(room=room).exclude(username=request.user.username)[0])
+#     context = {
+#         'room_list': room_list,
+#         'other_user_list': other_users_list,
+#     }
+#     return context
 
 
-@login_required
-def chat_room_list(request):
-    context = __get_rooms_and_other_users(request)
-    return render(request, 'cross_book/chat_room_list.html', context)
+# @login_required
+# def chat_room_list(request):
+#     context = __get_rooms_and_other_users(request)
+#     return render(request, 'cross_book/chat_room_list.html', context)
 
 
-@login_required
-def chat_room(request, room_pk):
-    context_added = __get_rooms_and_other_users(request)
-    room = get_object_or_404(Room, pk=room_pk)
-    users = room.users.all()
-    other_user = ""
-    for user in users:
-        if user != request.user:
-            other_user = user
-    room_messages = Message.objects.filter(room=room).order_by('created_at').all()
-    context = {
-        'room_pk': mark_safe(json.dumps(room_pk)),
-        'username': mark_safe(json.dumps(request.user.username)),
-        'room_messages': room_messages,
-        'other_user': other_user,
-    }
-    context.update(context_added)
-    return render(request, 'cross_book/chat_room_list.html', context)
+# @login_required
+# def chat_room(request, room_pk):
+#     context_added = __get_rooms_and_other_users(request)
+#     room = get_object_or_404(Trade, pk=room_pk)
+#     users = room.users.all()
+#     other_user = ""
+#     for user in users:
+#         if user != request.user:
+#             other_user = user
+#     room_messages = TradeMessage.objects.filter(room=room).order_by('created_at').all()
+#     context = {
+#         'room_pk': mark_safe(json.dumps(room_pk)),
+#         'username': mark_safe(json.dumps(request.user.username)),
+#         'room_messages': room_messages,
+#         'other_user': other_user,
+#     }
+#     context.update(context_added)
+#     return render(request, 'cross_book/chat_room_list.html', context)
 
 
 @login_required
@@ -245,12 +245,12 @@ def request_item(request):
     user = request.user
     item = get_object_or_404(Item, id=request.POST.get('item_pk'))
     requested = False
-    user_request = TransactionRequest.objects.filter(user=user, item=item).first()
+    user_request = TradeRequest.objects.filter(user=user, item=item).first()
 
     if user_request:
         user_request.delete()
     else:
-        tran_req = TransactionRequest.objects.create(user=user, item=item)
+        tran_req = TradeRequest.objects.create(user=user, item=item)
         requested = True
 
     context = {
@@ -261,8 +261,17 @@ def request_item(request):
         return JsonResponse(context)
 
 
-def view_all_request(request):
+@login_required
+def view_item_trade_requests(request, pk):
     user = request.user
-    all_request_for_item = TransactionRequest.objects.filter(item__user=user)
-    context = {'all_request_for_item': all_request_for_item}
+    item = get_object_or_404(Item, id=pk)
+    requests_for_item = TradeRequest.objects.filter(item=item, item__user=user)
+    context = {'requests_for_item': requests_for_item}
     return render(request, 'cross_book/all_request.html', context)
+
+
+# @login_required
+# @require_POST
+# def start_trade(request):
+#     trade = Trade.objects.create()
+#     TradeInfo.objects.create(trader=request.user, traded_item=)

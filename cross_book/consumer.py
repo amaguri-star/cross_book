@@ -1,10 +1,8 @@
-import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import User, Room, Message, Item, Comment
+from .models import User, Trade, TradeMessage, Item, Comment
 from django.utils import timezone
-import pdb
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -14,8 +12,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             await self.accept()
             self.room_group_name = self.scope['url_route']['kwargs']['room_name']
-            print(self.room_group_name)
-            print(self.channel_name)
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name
@@ -69,9 +65,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def createMessage(self, event):
         try:
-            room = Room.objects.get(id=self.room_group_name)
+            room = Trade.objects.get(id=self.room_group_name)
             user = User.objects.get(username=event['author'])
-            Message.objects.create(
+            TradeMessage.objects.create(
                 user=user,
                 room=room,
                 message=event['message'],

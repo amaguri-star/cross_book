@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, pre_delete
 from notifications.signals import notify
 from django.dispatch import receiver, Signal
 from django.utils import timezone
-from .models import Address, User, Comment, Like, Notification, TransactionRequest
+from .models import Address, User, Comment, Like, Notification, TradeRequest
 
 
 @receiver(post_save, sender=User)
@@ -23,10 +23,10 @@ def send_comment_notify(sender, instance, created, *args, **kwargs):
                                     description="がコメントしました。", target=instance.item)
 
 
-@receiver(post_save, sender=TransactionRequest)
+@receiver(post_save, sender=TradeRequest)
 def send_transaction_request_notify(sender, instance, created, *args, **kwargs):
     if created:
-        Notification.objects.create(actor=instance.user, recipient=instance.item.user, type="transaction_request",
+        Notification.objects.create(actor=instance.user, recipient=instance.item.user, type="trade_request",
                                     description="が取引申請しました。", target=instance.item)
 
 

@@ -11,12 +11,6 @@ from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 
 
-
-
-# from .validators import *
-
-
-# Create your models here.
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -198,16 +192,6 @@ class Item(models.Model):
         return f'{self.user.username}\'s {self.name}'
 
 
-class TransactionRequest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.user} request to {self.item.name}'
-
-
 class Category(models.Model):
     name = models.CharField(max_length=255)
 
@@ -238,22 +222,19 @@ class Like(models.Model):
         return f'{self.user.username} liked {self.item.name}'
 
 
-class Room(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
-    users = models.ManyToManyField(User)
-
-    # def __str__(self):
-    #     return self
+# class Room(models.Model):
+#     timestamp = models.DateTimeField(auto_now=True)
+#     users = models.ManyToManyField(User)
 
 
-class Message(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
-    message = models.CharField(max_length=255)
-    created_at = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return f'{self.message}'
+# class Message(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
+#     message = models.CharField(max_length=255)
+#     created_at = models.DateTimeField(default=timezone.now)
+#
+#     def __str__(self):
+#         return f'{self.message}'
 
 
 class Comment(models.Model):
@@ -293,3 +274,32 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'{self.actor} {self.description}'
+
+
+class TradeRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user} request to {self.item.name}'
+
+
+class Trade(models.Model):
+    trading_start_date = models.DateTimeField(auto_now_add=True)
+
+
+class TradeMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    trade_ID = models.ForeignKey(Trade, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.message}'
+
+
+class TradeInfo(models.Model):
+    trader = models.ForeignKey(User, models.SET_NULL, null=True)
+    traded_item = models.ForeignKey(Item, models.SET_NULL, null=True)
+    trade_ID = models.ForeignKey(Trade, models.CASCADE)

@@ -7,7 +7,7 @@
             <li><a class="fas fa-pen fa-2x" href="{% url 'sell' %}"></a></li>
             <li id="notification_link_id" class="notification-link">
                 <div id="dropdown_id" class="dropdown">
-                    <i class="far fa-bell fa-2x" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                    <i class="fas fa-bell fa-2x" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false"></i>
 
                     <div id="dropdown-menu_id" class="dropdown-menu dropdown-menu-right"
@@ -35,7 +35,7 @@
                 </div>
                 <span id="unread_notify_count_id" class="new_message_count"></span>
             </li>
-            <li><a class="far fa-comment fa-2x" href="{% url 'chat-room-list' %}"></a></li>
+            <li class="fas fa-box fa-2x"><a href="#"></a></li>
             <li><a href="{% url 'my_page' request.user.id %}"><img class="navbar-user-icon-image" width="40" height="40"
                                                                    src="{{ request.user.image.url }}"
                                                                    alt=""></a></li>
@@ -92,10 +92,10 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken,
                 }
-             })
+            })
                 .catch((error) => {
-                console.error(error);
-             })
+                    console.error(error);
+                })
         })
     }
 

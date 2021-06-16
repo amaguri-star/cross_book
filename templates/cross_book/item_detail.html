@@ -59,7 +59,7 @@
             <div class="like-part">
                 {% include 'shared/like.html' %}
             </div>
-            <form action="{% url 'transaction_request_item' %}" method="POST">
+            <form action="{% url 'trade_request_item' %}" method="POST">
                 {% csrf_token %}
                 {% if requested %}
                     <button id="request_item_button" type="submit">申請済み</button>
@@ -130,7 +130,7 @@
                 event.preventDefault();
                 $.ajax({
                     type: 'POST',
-                    url: "{% url 'transaction_request_item' %}",
+                    url: "{% url 'trade_request_item' %}",
                     data: {
                         'item_pk': '{{ item.id }}',
                         'csrfmiddlewaretoken': '{{ csrf_token }}',

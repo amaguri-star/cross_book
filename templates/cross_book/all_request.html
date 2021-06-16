@@ -6,21 +6,23 @@
 {% endblock %}
 {% block content %}
     <div class="all_request_content">
-        {% for user in all_request_for_item %}
+        {% for req in requests_for_item %}
             <div class="request-user-for-item">
-                <a class="request-user-for-item_image-outer" href="{% url 'my_page' user.user_id %}">
-                    <img class="request-user-for-item_image" src="{{ user.user.image.url }}" alt="ユーザーのプロフィール画像">
+                <a class="request-user-for-item_image-outer" href="{% url 'my_page' req.user_id %}">
+                    <img class="request-user-for-item_image" src="{{ req.user.image.url }}" alt="ユーザーのプロフィール画像">
                 </a>
                 <div class="request-user-for-item_username-and-link-content">
-                    <p class="request-user-for-item_username">{{ user.user.username }}</p>
+                    <p class="request-user-for-item_username">{{ req.user.username }}</p>
                     <a class="request-user-for-item_user-profile-link"
-                       href="{% url 'my_page' user.user_id %}">出品一覧を見る</a>
+                       href="{% url 'my_page' req.user_id %}">出品一覧を見る</a>
                 </div>
                 <div class="request-user-for-item_forms">
-                    <form class="request-user-for-item_form" action="">
-                        <button class="request-user-for-item_button">承認</button>
+                    <form class="request-user-for-item_form" action="{% url "start_trade" %}" method="POST">
+                        <input type="hidden" name="trade_request_user_id" value="{{ req.user.id }}">
+                        <input type="hidden" name="item_pk" value="{{ req.item.id }}">
+                        <button class="request-user-for-item_button">取引する</button>
                     </form>
-                    <form class="request-user-for-item_form" action="">
+                    <form class="request-user-for-item_form" action="#" method="POST">
                         <button class="request-user-for-item_button">拒否</button>
                     </form>
 
