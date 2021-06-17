@@ -266,12 +266,24 @@ def view_item_trade_requests(request, pk):
     user = request.user
     item = get_object_or_404(Item, id=pk)
     requests_for_item = TradeRequest.objects.filter(item=item, item__user=user)
-    context = {'requests_for_item': requests_for_item}
+    context = {'requests_for_item': requests_for_item, 'item_pk': item.id}
     return render(request, 'cross_book/all_request.html', context)
 
 
-# @login_required
-# @require_POST
-# def start_trade(request):
-#     trade = Trade.objects.create()
-#     TradeInfo.objects.create(trader=request.user, traded_item=)
+@login_required
+@require_POST
+def start_trade(request, pk):
+    trade = Trade.objects.create()
+    req_user_for_item = get_object_or_404(User, id=request.POST.get('trade_request_user_id'))
+    traded_item = get_object_or_404(Item, id=pk)
+    TradeInfo.objects.create(trader=request.user, trade=trade)
+    TradeInfo.objects.create(trader=req_user_for_item, traded_item=traded_item, trade=trade)
+    return redirect()
+
+
+@login_required
+@require_POST
+def reject_trade_request(request, item_pk, trade_req_pk):
+    trade_request = get_object_or_404(TradeRequest, id=trade_req_pk)
+    trade_request.delete()
+    return redirect('view_item_trade_requests', item_pk)

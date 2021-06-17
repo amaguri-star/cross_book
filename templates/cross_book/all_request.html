@@ -17,15 +17,10 @@
                        href="{% url 'my_page' req.user_id %}">出品一覧を見る</a>
                 </div>
                 <div class="request-user-for-item_forms">
-                    <form class="request-user-for-item_form" action="{% url "start_trade" %}" method="POST">
-                        <input type="hidden" name="trade_request_user_id" value="{{ req.user.id }}">
-                        <input type="hidden" name="item_pk" value="{{ req.item.id }}">
-                        <button class="request-user-for-item_button">取引する</button>
+                    <form method="POST" action="{% url 'reject_trade_request' item_pk req.id %}" class="request-user-for-item_reject-form">
+                        {% csrf_token %}
+                        <button type="submit" class="request-user-for-item_button">拒否</button>
                     </form>
-                    <form class="request-user-for-item_form" action="#" method="POST">
-                        <button class="request-user-for-item_button">拒否</button>
-                    </form>
-
                 </div>
             </div>
         {% endfor %}

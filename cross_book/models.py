@@ -291,7 +291,7 @@ class Trade(models.Model):
 
 class TradeMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    trade_ID = models.ForeignKey(Trade, on_delete=models.CASCADE)
+    trade = models.ForeignKey(Trade, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -302,4 +302,4 @@ class TradeMessage(models.Model):
 class TradeInfo(models.Model):
     trader = models.ForeignKey(User, models.SET_NULL, null=True)
     traded_item = models.ForeignKey(Item, models.SET_NULL, null=True)
-    trade_ID = models.ForeignKey(Trade, models.CASCADE)
+    trade = models.ForeignKey(Trade, models.CASCADE)
