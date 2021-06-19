@@ -17,6 +17,11 @@
                        href="{% url 'my_page' req.user_id %}">出品一覧を見る</a>
                 </div>
                 <div class="request-user-for-item_forms">
+                    <form method="POST" action="{% url 'create_room' %}" class="request-user-for-item_submit-message">
+                        {% csrf_token %}
+                        <input type="hidden" name="req_user_id_for_item" value="{{ req.user_id }}">
+                        <button type="submit" class=request-user-for-item_button"">メッセージ送信</button>
+                    </form>
                     <form method="POST" action="{% url 'reject_trade_request' item_pk req.id %}" class="request-user-for-item_reject-form">
                         {% csrf_token %}
                         <button type="submit" class="request-user-for-item_button">拒否</button>

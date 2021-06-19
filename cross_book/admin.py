@@ -37,4 +37,7 @@ admin.site.register(TradeMessage)
 admin.site.register(Comment)
 admin.site.register(TradeRequest)
 admin.site.register(Notification)
+admin.site.register(Room)
+admin.site.register(RoomMember)
+admin.site.register(Message)
 

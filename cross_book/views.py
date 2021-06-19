@@ -11,6 +11,7 @@ from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import *
 from .decorators import *
 from .api.viewsets import *
+from django.db.models import Q
 import pdb
 
 
@@ -166,54 +167,50 @@ def category_page(request, pk):
     return render(request, 'cross_book/category_page.html', context)
 
 
-# @login_required
-# @require_POST
-# def create_room(request):
-#     item_num = request.POST.get('item_number')
-#     chatroom_user1 = request.user
-#     chatroom_user2 = get_object_or_404(Item, pk=item_num).user
-#     room = Room()
-#     room.save()
-#     room.users.add(chatroom_user1, chatroom_user2)
-#     return redirect('chat_room', room.id)
+@login_required
+@require_POST
+def create_room(request):
+    req_user_id_for_item = request.POST.get('req_user_id_for_item')
+    member1 = request.user
+    member2 = get_object_or_404(User, pk=req_user_id_for_item)
+    try:
+        room = Room.objects.get(Q(roommember__member=member1) and Q(roommember__member=member2))
+    except Room.DoesNotExist:
+        room = Room.objects.create()
+        RoomMember.objects.create(member=member1, room=room)
+        RoomMember.objects.create(member=member2, room=room)
+    return redirect('chat_room', room.id)
 
 
-# def __get_rooms_and_other_users(request):
-#     room_list = request.user.trade_set.all()
-#     other_users_list = []
-#     for room in room_list:
-#         other_users_list.append(User.objects.filter(room=room).exclude(username=request.user.username)[0])
-#     context = {
-#         'room_list': room_list,
-#         'other_user_list': other_users_list,
-#     }
-#     return context
+def get_chat_rooms(request):
+    rooms = Room.objects.filter(roommember__member=request.user).order_by('timestamp')
+    other_room_member = []
+    for room in rooms:
+        other_member = RoomMember.objects.get(~Q(member=request.user), room=room.id)
+        other_room_member.append(other_member)
+    context = {'other_room_member': other_room_member}
+    return context
 
 
-# @login_required
-# def chat_room_list(request):
-#     context = __get_rooms_and_other_users(request)
-#     return render(request, 'cross_book/chat_room_list.html', context)
+@login_required
+def chat_room_list(request):
+    context = get_chat_rooms(request)
+    return render(request, 'cross_book/chat_room_list.html', context)
 
 
-# @login_required
-# def chat_room(request, room_pk):
-#     context_added = __get_rooms_and_other_users(request)
-#     room = get_object_or_404(Trade, pk=room_pk)
-#     users = room.users.all()
-#     other_user = ""
-#     for user in users:
-#         if user != request.user:
-#             other_user = user
-#     room_messages = TradeMessage.objects.filter(room=room).order_by('created_at').all()
-#     context = {
-#         'room_pk': mark_safe(json.dumps(room_pk)),
-#         'username': mark_safe(json.dumps(request.user.username)),
-#         'room_messages': room_messages,
-#         'other_user': other_user,
-#     }
-#     context.update(context_added)
-#     return render(request, 'cross_book/chat_room_list.html', context)
+@login_required
+def chat_room(request, room_pk):
+    context = get_chat_rooms(request)
+    room_messages = get_object_or_404(Room, pk=room_pk).room_messages.all().order_by('created_at')
+    other_member_username = request.POST.get('other_member_username')
+    context_new = {
+        'room_pk': mark_safe(json.dumps(room_pk)),
+        'username': mark_safe(json.dumps(request.user.username)),
+        'room_messages': room_messages,
+        'other_user': other_member_username,
+    }
+    context.update(context_new)
+    return render(request, 'cross_book/chat_room_list.html', context)
 
 
 @login_required

@@ -35,6 +35,7 @@
                 </div>
                 <span id="unread_notify_count_id" class="new_message_count"></span>
             </li>
+            <li><a class="fas fa-comment fa-2x" href="{% url 'chat_room_list' %}"></a></li>
             <li class="fas fa-box fa-2x"><a href="#"></a></li>
             <li><a href="{% url 'my_page' request.user.id %}"><img class="navbar-user-icon-image" width="40" height="40"
                                                                    src="{{ request.user.image.url }}"

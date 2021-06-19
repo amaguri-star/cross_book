@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import User, Trade, TradeMessage, Item, Comment
+from .models import User, Room, Message, Item, Comment
 from django.utils import timezone
 
 
@@ -65,9 +65,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def createMessage(self, event):
         try:
-            room = Trade.objects.get(id=self.room_group_name)
+            room = Room.objects.get(id=self.room_group_name)
             user = User.objects.get(username=event['author'])
-            TradeMessage.objects.create(
+            Message.objects.create(
                 user=user,
                 room=room,
                 message=event['message'],

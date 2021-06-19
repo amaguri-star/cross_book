@@ -1,120 +1,121 @@
-{#{% extends 'shared/base.html' %}#}
-{#{% load static %}#}
-{#{% load boost %}#}
-{#{% block head %}#}
-{#    <link rel="stylesheet" href="{% static 'css/chatroom.css' %}">#}
-{#{% endblock %}#}
-{#{% block title %}チャットルーム_{{ room_pk }}{% endblock %}#}
-{#{% block content %}#}
-{#    <div id="chat-container">#}
-{#        <div id="search-container">#}
-{#            <input class="fas fa-search" type="text" placeholder="Seach" style="#}
-{#                    background: url({% static 'media/search.svg' %}) no-repeat rgba(198, 197, 199, 0.2);#}
-{#                    background-position: 15px center;#}
-{#                    background-size: 20px 20px;">#}
-{#        </div>#}
-{#        <div id="conversation-list">#}
-{#            {% for room, other_user in room_list|zip:other_user_list %}#}
-{#                <div href="{% url 'chat_room' room.id %}" class="conversation">#}
-{#                    <a href="{% url 'my_page' other_user.id %}">#}
-{#                        <img class="other-user-icon-image"#}
-{#                             src="{{ other_user.image.url }}" alt="">#}
-{#                    </a>#}
-{#                    <a href="{% url 'chat_room' room.id %}">#}
-{#                        <div class="chat-user-username">#}
-{#                            {{ other_user.username }}#}
-{#                        </div>#}
-{#                        <div class="time-log">#}
-{#                            {{ rm.timestamp|date:"Md" }}日#}
-{#                        </div>#}
-{#                        <div class="conversation-message">#}
-{#                            {{ rm.room_messages.1 }}#}
-{#                        </div>#}
-{#                    </a>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#        {% if room_pk %}#}
-{#            {% include 'cross_book/room.html' %}#}
-{#        {% else %}#}
-{#            nothing here#}
-{#        {% endif %}#}
-{#    </div>#}
-{#{% endblock %}#}
-{##}
-{#{% block script %}#}
-{#    <script>#}
-{#        let room_pk = {{ room_pk }};#}
-{#        let username = {{ username }};#}
-{##}
-{#        const socket = new WebSocket(#}
-{#            'ws://'#}
-{#            + window.location.host#}
-{#            + '/ws/chat/'#}
-{#            + room_pk#}
-{#            + '/'#}
-{#        )#}
-{##}
-{#        document.querySelector('#message-sent').onclick = function sendMessage() {#}
-{#            const messageTextAreaDom = document.querySelector('#send-message-input-area');#}
-{#            console.log(messageTextAreaDom.textContent)#}
-{#            const message = messageTextAreaDom.textContent;#}
-{#            socket.send(JSON.stringify({#}
-{#                author: username,#}
-{#                message: message,#}
-{#            }));#}
-{#            messageTextAreaDom.textContent = "";#}
-{#        }#}
-{##}
-{#        socket.onmessage = e => {#}
-{#            let receiveData = JSON.parse(e.data);#}
-{#            createMessage(receiveData);#}
-{#        }#}
-{##}
-{##}
-{#        socket.onclose = e => {#}
-{#            console.error('Chat socket closed unexpectedly');#}
-{#        }#}
-{##}
-{#        function createMessage(data) {#}
-{#            let author = data['author'];#}
-{#            let msgListTag = document.createElement('li');#}
-{#            let content_divTag = document.createElement('div');#}
-{#            let imgTag = document.createElement('img');#}
-{#            let text_divTag = document.createElement('div');#}
-{#            let create_at_divTag = document.createElement('div');#}
-{#            msgListTag.className = "message-row"#}
-{#            content_divTag.className = "message-content";#}
-{#            text_divTag.className = "message-text";#}
-{#            create_at_divTag.className = "message-time";#}
-{#            create_at_divTag.textContent = data['created_at']#}
-{#            text_divTag.textContent = data['message'];#}
-{#            if (author === username) {#}
-{#                msgListTag.className = 'message-row sent';#}
-{#            } else {#}
-{#                imgTag.src = "{{ other_user.image.url }}";#}
-{#                content_divTag.appendChild(imgTag);#}
-{#                msgListTag.className = 'message-row replies';#}
-{#            }#}
-{#            content_divTag.appendChild(text_divTag);#}
-{#            content_divTag.appendChild(create_at_divTag);#}
-{#            msgListTag.appendChild(content_divTag);#}
-{#            document.querySelector('#chat-message-list').appendChild(msgListTag);#}
-{##}
-{#            let conversation = document.querySelector('.conversation-message');#}
-{#            conversation.innerHTML = text_divTag.textContent#}
-{#            scrollDown()#}
-{#        }#}
-{##}
-{#        function scrollDown() {#}
-{#            let messageList = document.querySelector('#chat-message-list')#}
-{#            messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;#}
-{#        }#}
-{##}
-{#        document.addEventListener('DOMContentLoaded', scrollDown, false)#}
-{#        document.addEventListener('DOMContentLoaded', function () {#}
-{#            let messageRow = document.querySelectorAll('.message-row');#}
-{#        }, false)#}
-{#    </script>#}
-{##}
-{#{% endblock %}#}
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load boost %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/chatroom.css' %}">
+{% endblock %}
+{% block title %}チャットルーム_{{ room_pk }}{% endblock %}
+{% block content %}
+    <div id="chat-container">
+        <div id="search-container">
+            <input class="fas fa-search" type="text" placeholder="Seach" style="
+                    background: url({% static 'media/search.svg' %}) no-repeat rgba(198, 197, 199, 0.2);
+                    background-position: 15px center;
+                    background-size: 20px 20px;">
+        </div>
+        <div id="conversation-list">
+            {% for other_member in other_room_member %}
+                <div class="conversation">
+                    <a href="{% url 'my_page' other_member.member.id %}">
+                        <img class="other-user-icon-image"
+                             src="{{ other_member.member.image.url }}" alt="">
+                    </a>
+                    <a href="{% url 'chat_room' other_member.room.id %}">
+                        <div class="chat-user-username">
+                            <input type="hidden" name="other_member_username" value="{{ other_member.member.username }}">
+                            {{ other_member.member.username }}
+                        </div>
+                        <div class="time-log">
+                            {{ other_member.room.timestamp|date:"Md" }}日
+                        </div>
+                        <div class="conversation-message">
+                            {{ other_member.room.room_messages.1 }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {% if room_pk %}
+            {% include 'cross_book/room.html' %}
+        {% else %}
+            nothing here
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        let room_pk = {{ room_pk }};
+        let username = {{ username }};
+
+        const socket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + room_pk
+            + '/'
+        )
+
+        document.querySelector('#message-sent').onclick = function sendMessage() {
+            const messageTextAreaDom = document.querySelector('#send-message-input-area');
+            console.log(messageTextAreaDom.textContent)
+            const message = messageTextAreaDom.textContent;
+            socket.send(JSON.stringify({
+                author: username,
+                message: message,
+            }));
+            messageTextAreaDom.textContent = "";
+        }
+
+        socket.onmessage = e => {
+            let receiveData = JSON.parse(e.data);
+            createMessage(receiveData);
+        }
+
+
+        socket.onclose = e => {
+            console.error('Chat socket closed unexpectedly');
+        }
+
+        function createMessage(data) {
+            let author = data['author'];
+            let msgListTag = document.createElement('li');
+            let content_divTag = document.createElement('div');
+            let imgTag = document.createElement('img');
+            let text_divTag = document.createElement('div');
+            let create_at_divTag = document.createElement('div');
+            msgListTag.className = "message-row"
+            content_divTag.className = "message-content";
+            text_divTag.className = "message-text";
+            create_at_divTag.className = "message-time";
+            create_at_divTag.textContent = data['created_at']
+            text_divTag.textContent = data['message'];
+            if (author === username) {
+                msgListTag.className = 'message-row sent';
+            } else {
+                imgTag.src = "{{ other_user.image.url }}";
+                content_divTag.appendChild(imgTag);
+                msgListTag.className = 'message-row replies';
+            }
+            content_divTag.appendChild(text_divTag);
+            content_divTag.appendChild(create_at_divTag);
+            msgListTag.appendChild(content_divTag);
+            document.querySelector('#chat-message-list').appendChild(msgListTag);
+
+            let conversation = document.querySelector('.conversation-message');
+            conversation.innerHTML = text_divTag.textContent
+            scrollDown()
+        }
+
+        function scrollDown() {
+            let messageList = document.querySelector('#chat-message-list')
+            messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', scrollDown, false)
+        document.addEventListener('DOMContentLoaded', function () {
+            let messageRow = document.querySelectorAll('.message-row');
+        }, false)
+    </script>
+
+{% endblock %}

@@ -222,19 +222,23 @@ class Like(models.Model):
         return f'{self.user.username} liked {self.item.name}'
 
 
-# class Room(models.Model):
-#     timestamp = models.DateTimeField(auto_now=True)
-#     users = models.ManyToManyField(User)
+class Room(models.Model):
+    timestamp = models.DateTimeField(auto_now=True)
 
 
-# class Message(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
-#     message = models.CharField(max_length=255)
-#     created_at = models.DateTimeField(default=timezone.now)
-#
-#     def __str__(self):
-#         return f'{self.message}'
+class RoomMember(models.Model):
+    member = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+
+class Message(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, related_name="room_messages", on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.message}'
 
 
 class Comment(models.Model):
