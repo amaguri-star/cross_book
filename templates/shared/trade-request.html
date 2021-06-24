@@ -1,0 +1,8 @@
+<form action="{% url 'trade_request_item' %}" method="POST">
+    {% csrf_token %}
+    {% if requested %}
+        <button id="request-item-button" type="submit">取引申請済み</button>
+    {% else %}
+        <button id="request-item-button" type="submit">取引申請する</button>
+    {% endif %}
+</form>
