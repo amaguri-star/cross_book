@@ -123,7 +123,6 @@ def item_detail(request, pk):
     comments = item.comment_set.all()
     item_liked = item.like_set.filter(user=user)
     item_images = item.image_set.all()
-    thumbnail = item.image_set.all()[0]
     requested = user.traderequest_set.filter(item=item).first()
 
     context = {
@@ -131,10 +130,10 @@ def item_detail(request, pk):
         'user': user,
         'item_liked': item_liked,
         'item_images': item_images,
-        'thumbnail': thumbnail,
         'comments': comments,
         'requested': requested
     }
+
     return render(request, 'cross_book/item_detail.html', context)
 
 

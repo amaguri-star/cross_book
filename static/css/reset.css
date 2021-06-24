@@ -76,6 +76,10 @@ input, select, textarea, button {
     appearance: none;
 }
 
+button:focus {
+    outline: none;
+}
+
 body {
     color: #000;
     -webkit-text-size-adjust: 100%;

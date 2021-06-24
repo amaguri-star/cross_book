@@ -7,148 +7,70 @@
     <link rel="stylesheet" href="{% static 'css/trade-request.css' %}">
 {% endblock %}
 {% block content %}
-    {#    <div class="item-detail-page">#}
-    {#        <div class="item-detail-page-content">#}
-    {#            <div class="item-image-part">#}
-    {#                <div class="heading-image">#}
-    {#                    <div class="item-image-wrapper">#}
-    {#                        <img alt="選択中の商品画像" src="{{ thumbnail.image.url }}" id="featured" class="item-image">#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#                <div class="image-preview-zone">#}
-    {#                    {% for item_image in item_images %}#}
-    {#                        {% if forloop.counter == 1 %}#}
-    {#                            <div class="item-image-wrapper">#}
-    {#                                <img alt="商品画像" src="{{ thumbnail.image.url }}"#}
-    {#                                     class="item-image select-image active_img">#}
-    {#                            </div>#}
-    {#                        {% else %}#}
-    {#                            <div class="item-image-wrapper">#}
-    {#                                <img alt="商品画像" src="{{ item_image.image.url }}" class="item-image select-image">#}
-    {#                            </div>#}
-    {#                        {% endif %}#}
-    {#                    {% endfor %}#}
-    {#                </div>#}
-    {#            </div>#}
-    {#            <div class="item-detail-part">#}
-    {#                <table class="table table-striped">#}
-    {#                    <tr>#}
-    {#                        <th>商品名</th>#}
-    {#                        <td>{{ item.name }}</td>#}
-    {#                    </tr>#}
-    {#                    <tr>#}
-    {#                        <th>商品の状態</th>#}
-    {#                        <td>{{ item.get_state_display }}</td>#}
-    {#                    </tr>#}
-    {#                    <tr>#}
-    {#                        <th>カテゴリ</th>#}
-    {#                        <td>{{ item.category }}</td>#}
-    {#                    </tr>#}
-    {#                    <tr>#}
-    {#                        <th>配送地</th>#}
-    {#                        <td>{{ item.get_shipping_area_display }}</td>#}
-    {#                    </tr>#}
-    {#                    <tr>#}
-    {#                        <th>配送日数</th>#}
-    {#                        <td>{{ item.get_shipping_day_display }}</td>#}
-    {#                    </tr>#}
-    {#                    <tr>#}
-    {#                        <th>出品日</th>#}
-    {#                        <td>{{ item.at_created }}</td>#}
-    {#                    </tr>#}
-    {#                </table>#}
-    {#                <div class="item-explanation-part">#}
-    {#                    {{ item.explanation }}#}
-    {#                </div>#}
-    {#            </div>#}
-    {#            <div class="like-part">#}
-    {#                {% include 'shared/like.html' %}#}
-    {#            </div>#}
-    {#            <form action="{% url 'trade_request_item' %}" method="POST">#}
-    {#                {% csrf_token %}#}
-    {#                {% if requested %}#}
-    {#                    <button id="request_item_button" type="submit">申請済み</button>#}
-    {#                {% else %}#}
-    {#                    <button id="request_item_button" type="submit">取引申請する</button>#}
-    {#                {% endif %}#}
-    {##}
-    {#            </form>#}
-    {#        </div>#}
-    {#        <div class="item-comment-part-page">#}
-    {#            <ul class="comment-log">#}
-    {#                {% for cmt in comments %}#}
-    {#                    <li>{{ cmt.comment }}</li>#}
-    {#                {% endfor %}#}
-    {#            </ul>#}
-    {#            <div>#}
-    {#                <input id="comment-input-area" type="text" placeholder="コメントを残す">#}
-    {#                <button id="comment-sent" type="submit">送信</button>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-
     <div class="item-detail-page-content-outer">
-    <div class="item-detail-page-content">
-        <h1 class="item-detail-page-content_head-item-name">{{ item.name }}</h1>
-        <div class="item-detail-page-content_images-part">
-            <div class="item-detail-page-content_heading-image_outer">
-                <img class="item-detail-page-content_heading-image" alt="選択中の商品画像" src="{{ thumbnail.image.url }}"
-                     id="featured">
-            </div>
-            <div class="item-detail-page-content_images_preview-zone">
-                {% for item_image in item_images %}
-                    {% if forloop.counter == 1 %}
-                        <div class="item-detail-page-content_images_preview-zone_item-image-wrapper">
-                            <img alt="商品画像" src="{{ thumbnail.image.url }}"
-                                 class="item-detail-page-content_images_preview-zone_item-image select-image active_img">
-                        </div>
-                    {% else %}
-                        <div class="item-detail-page-content_images_preview-zone_item-image-wrapper">
-                            <img alt="商品画像" src="{{ item_image.image.url }}"
-                                 class="item-detail-page-content_images_preview-zone_item-image select-image">
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+        <div class="item-detail-page-content">
+            <h1 class="item-detail-page-content_head-item-name">{{ item.name }}</h1>
+            <div class="item-detail-page-content_images-part">
+                <div class="item-detail-page-content_heading-image_outer">
+                    <img class="item-detail-page-content_heading-image" alt="選択中の商品画像"
+                         src="{{ item_images.0.image.url }}"
+                         id="featured">
+                </div>
+                <div class="item-detail-page-content_images_preview-zone">
+                    {% for item_image in item_images %}
+                        {% if forloop.counter == 1 %}
+                            <div class="item-detail-page-content_images_preview-zone_item-image-wrapper">
+                                <img alt="商品画像" src="{{ item_image.image.url }}"
+                                     class="item-detail-page-content_images_preview-zone_item-image select-image active_img">
+                            </div>
+                        {% else %}
+                            <div class="item-detail-page-content_images_preview-zone_item-image-wrapper">
+                                <img alt="商品画像" src="{{ item_image.image.url }}"
+                                     class="item-detail-page-content_images_preview-zone_item-image select-image">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
 
-        </div>
-        <div class="item-detail-page-content_text-part">
-            <div class="item-detail-page-content_text-part_selected_field">
-                <span class="item-detail-page-content_text-part_selected_field_span-tag">商品状態:</span>{{ item.get_state_display }}
             </div>
-            <div class="item-detail-page-content_text-part_selected_field">
-                <span class="item-detail-page-content_text-part_selected_field_span-tag">カテゴリ:</span>{{ item.category }}
+            <div class="item-detail-page-content_text-part">
+                <div class="item-detail-page-content_text-part_selected_field">
+                    <span class="item-detail-page-content_text-part_selected_field_span-tag">商品状態:</span>{{ item.get_state_display }}
+                </div>
+                <div class="item-detail-page-content_text-part_selected_field">
+                    <span class="item-detail-page-content_text-part_selected_field_span-tag">カテゴリ:</span>{{ item.category }}
+                </div>
+                <div class="item-detail-page-content_text-part_selected_field">
+                    <span class="item-detail-page-content_text-part_selected_field_span-tag">配送までの日数:</span>{{ item.get_shipping_area_display }}
+                </div>
+                <div class="item-detail-page-content_text-part_selected_field">
+                    <span class="item-detail-page-content_text-part_selected_field_span-tag">配送場所:</span>{{ item.get_shipping_day_display }}
+                </div>
+                <div class="item-detail-page-content_text-part_selected_field">
+                    <span class="item-detail-page-content_text-part_selected_field_span-tag">出品日:</span>{{ item.at_created }}
+                </div>
+                <div class="item-detail-page-content_text-part_selected_field">
+                    <span class="item-detail-page-content_text-part_selected_field_span-tag">出品者からの一言:</span>{{ item.explanation }}
+                </div>
             </div>
-            <div class="item-detail-page-content_text-part_selected_field">
-                <span class="item-detail-page-content_text-part_selected_field_span-tag">配送までの日数:</span>{{ item.get_shipping_area_display }}
+            <div class="item-detail-page-content_user-action-section">
+                <div class="like-part">
+                    {% include 'shared/like.html' %}
+                </div>
+                <div class="trade-request-part">
+                    {% include 'shared/trade-request.html' %}
+                </div>
             </div>
-            <div class="item-detail-page-content_text-part_selected_field">
-                <span class="item-detail-page-content_text-part_selected_field_span-tag">配送場所:</span>{{ item.get_shipping_day_display }}
-            </div>
-            <div class="item-detail-page-content_text-part_selected_field">
-                <span class="item-detail-page-content_text-part_selected_field_span-tag">出品日:</span>{{ item.at_created }}
-            </div>
-            <div class="item-detail-page-content_text-part_selected_field">
-                <span class="item-detail-page-content_text-part_selected_field_span-tag">出品者からの一言:</span>{{ item.explanation }}
-            </div>
-        </div>
-        <div class="item-detail-page-content_user-action-section">
-            <div class="like-part">
-                {% include 'shared/like.html' %}
-            </div>
-            <div class="trade-request-part">
-                {% include 'shared/trade-request.html' %}
-            </div>
-        </div>
-        <div class="item-comment-part">
-            <ul class="comment-log">
-                {% for cmt in comments %}
-                    <li>{{ cmt.comment }}</li>
-                {% endfor %}
-            </ul>
-            <div class="item-comment-part_input-message-and-submit-field">
-                <input id="comment-input-area" class="comment-input-area_css" type="text" placeholder="コメントを残す">
-                <button id="comment-sent" class="comment-sent_css" type="submit">送信</button>
+            <div class="item-comment-part">
+                <ul class="comment-log">
+                    {% for cmt in comments %}
+                        <li>{{ cmt.comment }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="item-comment-part_input-message-and-submit-field">
+                    <input id="comment-input-area" class="comment-input-area_css" type="text" placeholder="コメントを残す">
+                    <button id="comment-sent" class="comment-sent_css" type="submit">送信</button>
+                </div>
             </div>
         </div>
     </div>
