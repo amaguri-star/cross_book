@@ -91,6 +91,7 @@ def sell_page(request):
         can_delete=False,
         min_num=1,
         validate_min=True,
+        labels=None,
     )
 
     if request.method == "POST":
@@ -109,7 +110,7 @@ def sell_page(request):
         else:
             return render(request, 'cross_book/sell.html', {'form': form, 'formset': formset})
 
-    formset = image_form_set(queryset=Image.objects.none())
+    formset = image_form_set(queryset=Image.objects.none(),)
     form = CreateItemForm()
     context = {'form': form, 'formset': formset}
     return render(request, 'cross_book/sell.html', context)

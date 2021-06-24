@@ -207,7 +207,7 @@ def get_image_filename(instance, filename):
 
 class Image(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name="画像", upload_to=get_image_filename)
+    image = models.ImageField(verbose_name='', upload_to=get_image_filename)
 
     def __str__(self):
         return f'{self.item.name}\'s image'

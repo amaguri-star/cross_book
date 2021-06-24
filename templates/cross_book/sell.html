@@ -1,18 +1,33 @@
 {% extends 'shared/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}出品ページ{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/sell.css' %}">
+{% endblock %}
 {% block content %}
-    <form class="sell-form" action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table>
-            {% for fs in formset %}
-                {{ fs }}
-            {% endfor %}
-            {{ form.as_table }}
-        </table>
-        <button id="saveBtn" type="submit">出品</button>
-    </form>
+    <div class="sell-page-content">
+        <form class="sell-page-content_form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <div class="sell-page-content_form_formset">
+                {% for formset_field in formset %}
+                    {{ formset_field.as_p }}
+                {% endfor %}
+                <p class="sell-page-content_form_formset_message">※最低でも一つは画像を選択してください</p>
+            </div>
+            <div class="sell-page-content_form_form">
+                {% for form_field in form %}
+                    <p class="sell-page-content_form_form_required">{{ form_field.label }}</p>
+                    {{ form_field.errors }}
+                    {{ form_field|add_class:'sell-page-content_form_form_field_input' }}
+                {% endfor %}
+            </div>
+            <div class="sell-page-content_form_submit-button_outer">
+                <button class="sell-page-content_form_submit-button" id="saveBtn" type="submit">出品</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 {#{% block script %}#}
 {#    <script>#}

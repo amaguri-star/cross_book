@@ -54,7 +54,9 @@ class CreateItemForm(forms.ModelForm):
         model = Item
         exclude = ['user', 'at_created']
         widgets = {
-            'category': forms.Select(choices=choices)
+            'name': forms.TextInput(attrs={'class': '', 'placeholder': '商品名を記入してください(必須)'}),
+            'explanation': forms.Textarea(attrs={'class': '', 'placeholder': '商品の説明(必須)'}),
+            'category': forms.Select(choices=choices),
         }
 
 
