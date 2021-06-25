@@ -6,7 +6,6 @@ from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from django import forms
 import json
-from notifications.signals import notify
 from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
 from .models import *
 from .decorators import *
@@ -110,7 +109,7 @@ def sell_page(request):
         else:
             return render(request, 'cross_book/sell.html', {'form': form, 'formset': formset})
 
-    formset = image_form_set(queryset=Image.objects.none(),)
+    formset = image_form_set(queryset=Image.objects.none(), )
     form = CreateItemForm()
     context = {'form': form, 'formset': formset}
     return render(request, 'cross_book/sell.html', context)
@@ -284,3 +283,11 @@ def reject_trade_request(request, item_pk, trade_req_pk):
     trade_request = get_object_or_404(TradeRequest, id=trade_req_pk)
     trade_request.delete()
     return redirect('view_item_trade_requests', item_pk)
+
+
+def search_item(request):
+    q_word = request.GET.get('query')
+    item_list = Item.objects.filter(
+        Q(name__contains=q_word) | Q(explanation__icontains=q_word) | Q(category__contains=q_word))
+    context = {'item_list': item_list, 'item_count': item_list.count()}
+    return render(request, 'cross_book/search.html', context)

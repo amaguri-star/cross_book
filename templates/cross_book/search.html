@@ -1,0 +1,16 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}検索結果{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content %}
+    {{ item_count }}
+    {% for item in item_list %}
+        {{ item.user.username }}
+        {{ item.name }}
+        {{ item.get_state_display }}
+        {{ item.category }}
+        <img src="{{ item.image_set.all.0.image.url }}" alt="">
+    {% endfor %}
+{% endblock %}

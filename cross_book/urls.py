@@ -8,6 +8,7 @@ urlpatterns = [
     path('mypage/<int:pk>/edit/', views.edit_user_profile, name='edit_user_profile'),
     path('set_address/', views.address_page, name='set_address'),
     path('sell/', views.sell_page, name="sell"),
+    path('search/', views.search_item, name="search_item"),
     path('item/<int:pk>/', views.item_detail, name="item_detail"),
     path('item/<int:pk>/edit/', views.edit_item, name="edit_item"),
     path('item/<int:pk>/trade-requests/', views.view_item_trade_requests, name="view_item_trade_requests"),

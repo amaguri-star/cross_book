@@ -2,6 +2,11 @@
 {% load custom_tags %}
 <nav id="nav-bar">
     <h1 id="nav-bar-header"><a href="{% url 'home' %}">CROSS-BOOK.</a></h1>
+    <form action="{% url 'search_item' %}" method="get">
+        <input type="search" value="{{ request.GET.query }}" name="query"
+               placeholder="ここに入力">
+        <button type="submit">検索</button>
+    </form>
     {% if request.user.is_authenticated %}
         <ul class="nav-links">
             <li><a class="fas fa-pen fa-2x" href="{% url 'sell' %}"></a></li>
