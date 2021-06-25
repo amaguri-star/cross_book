@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from django import forms
@@ -153,16 +153,13 @@ def edit_item(request, pk):
     return render(request, 'cross_book/edit-item.html', context)
 
 
+@require_GET
 def category_page(request, pk):
     if pk == 1:
         return redirect('home')
     category = get_object_or_404(Category, id=pk)
     items = Item.objects.filter(category=category)
-    item_first_images = []
-    for item in items:
-        image = item.image_set.all()[0]
-        item_first_images.append(image)
-    context = {'items': items, 'item_first_image': item_first_images, 'category': category}
+    context = {'items': items, 'category': category}
     return render(request, 'cross_book/category_page.html', context)
 
 
@@ -285,9 +282,12 @@ def reject_trade_request(request, item_pk, trade_req_pk):
     return redirect('view_item_trade_requests', item_pk)
 
 
+@require_GET
 def search_item(request):
     q_word = request.GET.get('query')
-    item_list = Item.objects.filter(
-        Q(name__contains=q_word) | Q(explanation__icontains=q_word) | Q(category__contains=q_word))
-    context = {'item_list': item_list, 'item_count': item_list.count()}
+    item_first_image_list = Image.objects.filter(
+        Q(item__name__icontains=q_word) |
+        Q(item__explanation__icontains=q_word) |
+        Q(item__category__icontains=q_word))
+    context = {'item_first_image_list': item_first_image_list, 'item_count': item_first_image_list.count() }
     return render(request, 'cross_book/search.html', context)

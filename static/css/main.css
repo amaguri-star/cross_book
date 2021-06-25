@@ -11,7 +11,6 @@ body {
     color: red;
 }
 
-
 .form-field-outer {
     display: flex;
     flex-flow: column;
@@ -29,7 +28,6 @@ body {
     width: 100%;
     margin: 30px 0;
 }
-
 
 .form-header {
     font-size: 40px;
@@ -117,60 +115,3 @@ body {
     padding: 20px;
     border-radius: 3px;
 }
-
-.user-item-part-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.specific-user-item-image-wrapper {
-    width: 20%;
-    background-color: whitesmoke;
-    border: solid 2px white;
-}
-
-.specific-user-item-image {
-    display: block;
-    width: 100%;
-    padding-top: 100%;
-}
-
-
-/*出品ページ*/
-.sell-form {
-    width: 50%;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.preview-image-field {
-    background-color: lightgrey;
-}
-
-.preview-images {
-    display: flex;
-}
-
-.item-image-container__unit--caption {
-    position: relative;
-    width: 20%;
-    height: 200px;
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-}
-
-.item-image-container__unit--caption img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    vertical-align: middle;
-}
-
-
-/*カテゴリーページ*/
-.category-page-outer {
-    padding: 0 200px;
-}
-

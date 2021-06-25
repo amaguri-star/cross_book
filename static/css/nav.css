@@ -9,6 +9,7 @@
 
 #nav-bar-header {
     font-size: 1.6rem;
+    margin-right: 10px;
 }
 
 .nav-links {
@@ -140,6 +141,11 @@
 .nav-active {
     transform: translateX(0%);
 }
+
+.nav-bar_search + .nav-bar_search {
+    margin-left: 20px;
+}
+
 
 @keyframes navLinkFade {
     from {

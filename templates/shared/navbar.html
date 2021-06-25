@@ -2,10 +2,36 @@
 {% load custom_tags %}
 <nav id="nav-bar">
     <h1 id="nav-bar-header"><a href="{% url 'home' %}">CROSS-BOOK.</a></h1>
-    <form action="{% url 'search_item' %}" method="get">
-        <input type="search" value="{{ request.GET.query }}" name="query"
+    <div class="nav-bar_search btn-group">
+        <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            カテゴリから探す
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'category_page' 2 %}">文学・エッセイ</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 3 %}">ビジネス・経済</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 4 %}">漫画・ラノベ</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 5 %}">趣味・実用</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 6 %}">学問・資格・教育</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 7 %}">絵本・児童賞</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 8 %}">エンタメ</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 9 %}">雑誌・ムック</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'category_page' 10 %}">その他</a>
+            <div class="dropdown-divider"></div>
+        </div>
+    </div>
+    <form class="nav-bar_search form-inline" action="{% url 'search_item' %}" method="get">
+        <input class="form-control mr-sm-2" type="search" value="{{ request.GET.query }}" name="query"
                placeholder="ここに入力">
-        <button type="submit">検索</button>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">検索</button>
     </form>
     {% if request.user.is_authenticated %}
         <ul class="nav-links">
