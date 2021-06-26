@@ -6,43 +6,6 @@
     <link rel="stylesheet" href="{% static 'css/user-profile.css' %}">
 {% endblock %}
 {% block content %}
-    {#    <div class="user-profile-content">#}
-    {#        <div class="user-profile-content_header">#}
-    {#            <div class="user-profile-content_header_wrapper">#}
-    {#                <div class="user-profile-content_header_user-icon-image_outer">#}
-    {#                    <img class="user-profile-content_header_user-icon-image" src="{{ user.image.url }}" alt="ユーザーアカウントの画像">#}
-    {#                </div>#}
-    {#                {% if request.user == user %}#}
-    {#                <div class="user-profile-content_header_edit-button_outer">#}
-    {#                    <div class="user-profile-content_header_edit-button">#}
-    {#                        <a href="{% url 'edit_user_profile' user.id %}">#}
-    {#                            <button>プロフィールを編集する</button>#}
-    {#                        </a>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#                {% endif %}#}
-    {#            </div>#}
-    {#            <div class="user-profile-content_header_user-name">#}
-    {#                {{ user.username }}#}
-    {#            </div>#}
-    {#            <div class="user-profile-content_header_user-profile-text">#}
-    {#                {{ user.profile_text }}#}
-    {#            </div>#}
-    {#        </div>#}
-    {#        <div class="user-item-part-content">#}
-    {#            <div class="user-item-part">#}
-    {#                <div class="user-item-part-wrapper">#}
-    {#                    {% for liked_item in liked_item_list  %}#}
-    {#                            <a href="{% url 'item_detail' liked_item.id %}" class="specific-user-item-image-wrapper">#}
-    {#                                <div class="specific-user-item-image"#}
-    {#                                     style="background: url({{ liked_item.image_set.all.0.image.url }}) no-repeat center; background-size: contain;"></div>#}
-    {#                            </a>#}
-    {#                    {% endfor %}#}
-    {#                </div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-
     <div class="user-profile-container">
         <div class="user-profile-container_profile-header">
             <div class="user-profile-container_profile-header_image_outer">

@@ -1,12 +1,24 @@
 {% extends 'shared/base.html' %}
 {% load static %}
 {% block title %}ユーザープロフィール編集{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/edit-user-profile.css' %}">
+{% endblock %}
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <button type="submit">変更</button>
+    <form class="edit-user-profile-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="edit-user-profile-form_field">
+            <p>アイコン画像</p>
+            {{ form.image }}
+        </div>
+        <div class="edit-user-profile-form_field">
+            <p>ユーザー名</p>
+            {{ form.username }}
+        </div>
+        <div class="edit-user-profile-form_field">
+            <p>プロフィール文</p>
+            {{ form.profile_text }}
+        </div>
+        <button class="edit-user-profile-form_submit" type="submit">変更</button>
     </form>
 {% endblock %}
