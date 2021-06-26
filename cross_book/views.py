@@ -268,12 +268,12 @@ def reject_trade_request(request, item_pk, trade_req_pk):
 @require_GET
 def search_item(request):
     q_word = request.GET.get('query')
-    item_first_image_list = Image.objects.filter(
-        Q(item__name__icontains=q_word) |
-        Q(item__explanation__icontains=q_word) |
-        Q(item__category__icontains=q_word))
+    item_list = Item.objects.filter(
+        Q(name__icontains=q_word) |
+        Q(explanation__icontains=q_word) |
+        Q(category__icontains=q_word))
     context = {
-        'item_first_image_list': item_first_image_list,
-        'item_count': item_first_image_list.count(),
+        'item_list': item_list,
+        'item_count': item_list.count(),
         'q_word': q_word}
     return render(request, 'cross_book/search.html', context)

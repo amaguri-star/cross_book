@@ -84,7 +84,7 @@
 .user-profile-container_main-bd_profile-body_item-link {
     display: block;
     width: 20%;
-    background-color: whitesmoke;
+    background: rgba(238, 238, 238, .5);
     border: solid 2px white;
 }
 

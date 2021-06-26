@@ -10,11 +10,11 @@
         <h1 class="search-content_item-count">"{{ q_word }}" の検索結果件数 {{ item_count }}</h1>
         <div class="search-content_item-part">
             <div class="search-content_item-part_wrapper">
-                {% for item_first_image in item_first_image_list %}
+                {% for item in item_list %}
                     <a class="search-content_item-part_item-link"
-                       href="{% url 'item_detail' item_first_image.item.id %}">
+                       href="{% url 'item_detail' item.id %}">
                         <div class="search-content_item-part_item-link_image"
-                             style="background: url({{ item_first_image.image.url }}) no-repeat center; background-size: contain">
+                             style="background: url({{ item.image_set.all.0.image.url }}) no-repeat center; background-size: contain">
                         </div>
                     </a>
                 {% endfor %}
