@@ -3,7 +3,7 @@
 <nav id="nav-bar">
     <h1 id="nav-bar-header"><a href="{% url 'home' %}">CROSS-BOOK.</a></h1>
     <div class="nav-bar_search btn-group">
-        <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+        <button type="button" class="btn btn-outline-info dropdown-toggle nav-bar_search_submit-button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
             カテゴリから探す
         </button>
@@ -30,8 +30,8 @@
     </div>
     <form class="nav-bar_search form-inline" action="{% url 'search_item' %}" method="get">
         <input class="form-control mr-sm-2" type="search" value="{{ request.GET.query }}" name="query"
-               placeholder="ここに入力">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">検索</button>
+               placeholder="キーワード入力">
+        <button class="btn btn-outline-success my-2 my-sm-0 nav-bar_search_submit-button" type="submit">検索</button>
     </form>
     {% if request.user.is_authenticated %}
         <ul class="nav-links">

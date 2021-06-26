@@ -3,31 +3,21 @@
 {% load widget_tweaks %}
 {% block title %}検索結果{% endblock %}
 {% block head %}
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
 {% endblock %}
 {% block content %}
     <div class="search-content">
-        {{ item_count }}
-        {% for image in item_first_image_list %}
-            <img src="{{ image.image.url }}" alt="商品画像">
-        {% endfor %}
-    </div>
-
-
-    <div class="search-content">
-        <div class="search-content_item-count">
-            {{ item_count }}
-        </div>
-        <div class="search-content_item-list_outer">
-            <div class="search-content_item-list">
-                <div class="search-content_item-list_wrapper">
-                    {% for item in items_list %}
-                        <a href="{% url 'item_detail' item.id %}" class="specific-user-item-image-wrapper">
-                            <div class="specific-user-item-image"
-                                 style="background: url({{ item.image_set.all.0.image.url }}) no-repeat center; background-size: contain;"></div>
-                        </a>
-                    {% endfor %}
-                </div>
+        <h1 class="search-content_item-count">"{{ q_word }}" の検索結果件数 {{ item_count }}</h1>
+        <div class="search-content_item-part">
+            <div class="search-content_item-part_wrapper">
+                {% for item_first_image in item_first_image_list %}
+                    <a class="search-content_item-part_item-link"
+                       href="{% url 'item_detail' item_first_image.item.id %}">
+                        <div class="search-content_item-part_item-link_image"
+                             style="background: url({{ item_first_image.image.url }}) no-repeat center; background-size: contain">
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>

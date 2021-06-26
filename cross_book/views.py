@@ -289,5 +289,8 @@ def search_item(request):
         Q(item__name__icontains=q_word) |
         Q(item__explanation__icontains=q_word) |
         Q(item__category__icontains=q_word))
-    context = {'item_first_image_list': item_first_image_list, 'item_count': item_first_image_list.count() }
+    context = {
+        'item_first_image_list': item_first_image_list,
+        'item_count': item_first_image_list.count(),
+        'q_word': q_word}
     return render(request, 'cross_book/search.html', context)

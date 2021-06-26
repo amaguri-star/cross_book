@@ -146,6 +146,10 @@
     margin-left: 20px;
 }
 
+.nav-bar_search_submit-button {
+    border-radius: 22px;
+    padding: 2px 10px;
+}
 
 @keyframes navLinkFade {
     from {
