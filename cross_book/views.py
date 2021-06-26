@@ -19,34 +19,17 @@ def home(request):
     return render(request, 'cross_book/home.html', context)
 
 
+@login_required
 def my_page(request, pk):
     user = get_object_or_404(User, pk=pk)
-    all_items = Item.objects.all()
-    items_of_user = user.item_set.all()
-    length = items_of_user.count()
-    users_item_first_image = []
-    liked_list = []
-    liked_item_first_image = []
-
-    for item_of_user in items_of_user:
-        users_item_first_image.append(item_of_user.image_set.all()[0])
-
-    for item in all_items:
-        liked = item.like_set.filter(user=user)
-        if liked.exists():
-            liked_list.append(item.id)
-            liked_item_first_image.append(item.image_set.all()[0])
-
+    user_item_list = user.item_set.order_by('-at_created')
+    liked_item_list = Item.objects.filter(like__user=user)
     context = {
         'user': user,
-        'items_of_user': items_of_user,
-        'length': length,
-        'users_item_first_image': users_item_first_image,
-        'liked_list': liked_list,
-        'liked_item_first_image': liked_item_first_image
+        'user_item_list': user_item_list,
+        'liked_item_list': liked_item_list,
     }
-
-    return render(request, 'cross_book/user_profile.html', context)
+    return render(request, 'cross_book/user-profile.html', context)
 
 
 @login_required
@@ -62,7 +45,7 @@ def edit_user_profile(request, pk):
             return redirect('my_page', user.id)
 
     context = {'form': form}
-    return render(request, 'cross_book/edit_user_profile.html', context)
+    return render(request, 'cross_book/edit-user-profile.html', context)
 
 
 @login_required
@@ -76,7 +59,7 @@ def address_page(request):
             messages.success(request, "配送先を変更しました。")
             return redirect('home')
     context = {'form': form}
-    return render(request, 'cross_book/address_form.html', context)
+    return render(request, 'cross_book/address-form.html', context)
 
 
 @login_required
@@ -133,7 +116,7 @@ def item_detail(request, pk):
         'requested': requested
     }
 
-    return render(request, 'cross_book/item_detail.html', context)
+    return render(request, 'cross_book/item-detail.html', context)
 
 
 @login_required
@@ -160,7 +143,7 @@ def category_page(request, pk):
     category = get_object_or_404(Category, id=pk)
     items = Item.objects.filter(category=category)
     context = {'items': items, 'category': category}
-    return render(request, 'cross_book/category_page.html', context)
+    return render(request, 'cross_book/category-page.html', context)
 
 
 @login_required
@@ -191,7 +174,7 @@ def get_chat_rooms(request):
 @login_required
 def chat_room_list(request):
     context = get_chat_rooms(request)
-    return render(request, 'cross_book/chat_room_list.html', context)
+    return render(request, 'cross_book/chat-room-list.html', context)
 
 
 @login_required
@@ -206,7 +189,7 @@ def chat_room(request, room_pk):
         'other_user': other_member_username,
     }
     context.update(context_new)
-    return render(request, 'cross_book/chat_room_list.html', context)
+    return render(request, 'cross_book/chat-room-list.html', context)
 
 
 @login_required
@@ -260,7 +243,7 @@ def view_item_trade_requests(request, pk):
     item = get_object_or_404(Item, id=pk)
     requests_for_item = TradeRequest.objects.filter(item=item, item__user=user)
     context = {'requests_for_item': requests_for_item, 'item_pk': item.id}
-    return render(request, 'cross_book/all_request.html', context)
+    return render(request, 'cross_book/trade-request.html', context)
 
 
 @login_required

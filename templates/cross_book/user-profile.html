@@ -1,0 +1,96 @@
+{% extends 'shared/base.html' %}
+{% load boost %}
+{% load static %}
+{% block title %}マイページ{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/user-profile.css' %}">
+{% endblock %}
+{% block content %}
+    {#    <div class="user-profile-content">#}
+    {#        <div class="user-profile-content_header">#}
+    {#            <div class="user-profile-content_header_wrapper">#}
+    {#                <div class="user-profile-content_header_user-icon-image_outer">#}
+    {#                    <img class="user-profile-content_header_user-icon-image" src="{{ user.image.url }}" alt="ユーザーアカウントの画像">#}
+    {#                </div>#}
+    {#                {% if request.user == user %}#}
+    {#                <div class="user-profile-content_header_edit-button_outer">#}
+    {#                    <div class="user-profile-content_header_edit-button">#}
+    {#                        <a href="{% url 'edit_user_profile' user.id %}">#}
+    {#                            <button>プロフィールを編集する</button>#}
+    {#                        </a>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                {% endif %}#}
+    {#            </div>#}
+    {#            <div class="user-profile-content_header_user-name">#}
+    {#                {{ user.username }}#}
+    {#            </div>#}
+    {#            <div class="user-profile-content_header_user-profile-text">#}
+    {#                {{ user.profile_text }}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="user-item-part-content">#}
+    {#            <div class="user-item-part">#}
+    {#                <div class="user-item-part-wrapper">#}
+    {#                    {% for liked_item in liked_item_list  %}#}
+    {#                            <a href="{% url 'item_detail' liked_item.id %}" class="specific-user-item-image-wrapper">#}
+    {#                                <div class="specific-user-item-image"#}
+    {#                                     style="background: url({{ liked_item.image_set.all.0.image.url }}) no-repeat center; background-size: contain;"></div>#}
+    {#                            </a>#}
+    {#                    {% endfor %}#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+    <div class="user-profile-container">
+        <div class="user-profile-container_profile-header">
+            <div class="user-profile-container_profile-header_image_outer">
+                <img class="user-profile-container_profile-header_image" src="{{ user.image.url }}" alt="ユーザーアイコン画像">
+            </div>
+            <div class="user-profile-container_profile-header_user-info">
+                <h3 class="user-profile-container_profile-header_user-name">{{ user.username }}</h3>
+                <p class="user-profile-container_profile-header_item-count">出品数：{{ user_item_list.count }}</p>
+            </div>
+        </div>
+        <div class="user-profile-container_maid-bd">
+            <div class="user-profile-container_main-bd_nav">
+                <ul class="user-profile-container_main-bd_nav_ul">
+                    <li onclick="tabs(0)" class="user-profile-container_main-bd_nav_li user-post active">出品</li>
+                    <li onclick="tabs(1)" class="user-profile-container_main-bd_nav_li user-review">いいねした商品</li>
+                    <li onclick="tabs(2)" class="user-profile-container_main-bd_nav_li user-setting">レビュー</li>
+                </ul>
+            </div>
+            <div class="user-profile-container_maid-bd_profile-body">
+                <div class="user-profile-container_maid-bd_profile-body_posts tab">
+                    <div class="tab_wrapper">
+                        {% for user_item in user_item_list %}
+                            <a class="user-profile-container_main-bd_profile-body_item-link"
+                               href="{% url 'item_detail' user_item.id %}">
+                                <img src="{{ user_item.image_set.all.0.image.url }}"
+                                     class="user-profile-container_main-bd_profile-body_item-link_image">
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="user-profile-container_maid-bd_profile-body_liked-item tab">
+                    <div class="tab_wrapper">
+                        {% for liked_item in liked_item_list %}
+                            <a class="user-profile-container_main-bd_profile-body_item-link"
+                               href="{% url 'item_detail' liked_item.id %}">
+                                <img src="{{ liked_item.image_set.all.0.image.url }}"
+                                     class="user-profile-container_main-bd_profile-body_item-link_image">
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="user-profile-container_maid-bd_profile-body_review tab">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/user-profile.js' %}"></script>
+{% endblock %}
