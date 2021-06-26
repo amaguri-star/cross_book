@@ -1,11 +1,15 @@
 {% extends 'shared/base.html' %}
+{% load static %}
 {% block title %}配送先の設定{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/address-form.css' %}">
+{% endblock %}
 {% block content %}
     <form class="h-adr" method="POST">
-    {% csrf_token %}
-    <span class="p-country-name" style="display:none">Japan</span>
-    {{ form }}
-    <button type="submit">登録</button>
+        {% csrf_token %}
+        <span class="p-country-name" style="display:none">Japan</span>
+        {{ form }}
+        <button class="address-submit" type="submit">登録</button>
     </form>
     {% block script %}
         <script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
