@@ -23,7 +23,7 @@ def home(request):
 def my_page(request, pk):
     user = get_object_or_404(User, pk=pk)
     user_item_list = user.item_set.order_by('-at_created')
-    liked_item_list = Item.objects.filter(like__user=user)
+    liked_item_list = Item.objects.filter(like__user=user).order_by('-at_created')
     context = {
         'user': user,
         'user_item_list': user_item_list,

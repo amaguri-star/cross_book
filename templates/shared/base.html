@@ -25,11 +25,17 @@
 <body>
 {% include 'shared/navbar.html' %}
 {% if messages %}
-    <ul class="messages">
-        {% for msg in messages %}
-            <li{% if msg.tags %} class="{{ message.tags }}" {% endif %}>{{ msg }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="my-div-style w-100">
+                <ul class="messages">
+                    {% for msg in messages %}
+                        <li{% if msg.tags %} class="{{ msg.tags }}" {% endif %}>{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endif %}
 <div class="content">
     {% block content %}
