@@ -35,10 +35,10 @@
     </form>
     {% if request.user.is_authenticated %}
         <ul class="nav-links">
-            <li><a class="fas fa-pen fa-2x" href="{% url 'sell' %}"></a></li>
+            <li><a class="far fa-pen fa-2x nav-links_link" href="{% url 'sell' %}"></a></li>
             <li id="notification_link_id" class="notification-link">
                 <div id="dropdown_id" class="dropdown">
-                    <i class="fas fa-bell fa-2x" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                    <i class="far fa-bell fa-2x nav-links_link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false"></i>
 
                     <div id="dropdown-menu_id" class="dropdown-menu dropdown-menu-right"
@@ -66,8 +66,8 @@
                 </div>
                 <span id="unread_notify_count_id" class="new_message_count"></span>
             </li>
-            <li><a class="fas fa-comment fa-2x" href="{% url 'chat_room_list' %}"></a></li>
-            <li class="fas fa-box fa-2x"><a href="#"></a></li>
+            <li><a class="far fa-comment fa-2x nav-links_link"href="{% url 'chat_room_list' %}"></a></li>
+            <li><a class="far fa-box fa-2x nav-links_link" href="#"></a></li>
             <li><a href="{% url 'my_page' request.user.id %}"><img class="navbar-user-icon-image" width="40" height="40"
                                                                    src="{{ request.user.image.url }}"
                                                                    alt=""></a></li>

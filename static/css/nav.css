@@ -17,6 +17,10 @@
     margin: 0 0 0 auto;
 }
 
+.nav-links_link {
+    color: rgba(0, 0, 0, .7);
+}
+
 .nav-links > li {
     display: flex;
     align-items: center;
@@ -104,6 +108,10 @@
     display: none;
     cursor: pointer;
     margin-left: 10px;
+}
+
+.burger-link a {
+    color: rgba(0, 0, 0, .7);
 }
 
 .burger div {

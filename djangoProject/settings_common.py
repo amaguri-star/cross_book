@@ -4,7 +4,7 @@ from django.contrib.messages import constants as messages
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(4n8ip^m+x(y#nvndhae5edoou)4rxj+9oko$u=by_kb4yd8i0'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 AUTH_USER_MODEL = 'cross_book.User'
 
@@ -128,7 +128,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR, 'static',
-    BASE_DIR, 'node_modules',
 ]
 
 MEDIA_URL = '/media/'
