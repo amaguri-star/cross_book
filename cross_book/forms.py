@@ -46,9 +46,6 @@ class EditUserProfile(forms.ModelForm):
         fields = ('username', 'image', 'profile_text')
 
 
-choices = Category.objects.all().values_list('name', 'name')
-
-
 class CreateItemForm(forms.ModelForm):
     class Meta:
         model = Item
@@ -56,7 +53,6 @@ class CreateItemForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': '', 'placeholder': '商品名を記入してください(必須)'}),
             'explanation': forms.Textarea(attrs={'class': '', 'placeholder': '商品の説明(必須)'}),
-            'category': forms.Select(choices=choices),
         }
 
 
