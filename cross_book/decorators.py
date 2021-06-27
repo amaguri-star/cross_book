@@ -22,7 +22,7 @@ def unauthorized_user(view_func):
     return wrapper_func
 
 
-def user_who_not_allowed_to_edit(view_func):
+def user_who_not_allowed_to_edit_or_delete(view_func):
     def wrapper_func(request, pk):
         item = get_object_or_404(Item, pk=pk)
         item_user = item.user

@@ -72,6 +72,17 @@
                     <button id="comment-sent" class="comment-sent_css" type="submit">送信</button>
                 </div>
             </div>
+            {% if user == item.user %}
+                <div class="item-detail-page-content_only-item-owner">
+                    <div class="item-detail-page-content_only-item-owner_edit">
+                        <a href="{% url 'item_detail' item.id %}">編集</a>
+                    </div>
+                    <p style="text-align:center;">or</p>
+                    <form method="POST" class="item-detail-page-content_only-item-owner_delete" action="{% url 'delete_item' item.id %}">
+                        <button class="item-detail-page-content_only-item-owner_delete_button" type="submit">削除</button>
+                    </form>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

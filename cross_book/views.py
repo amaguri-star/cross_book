@@ -103,7 +103,7 @@ def item_detail(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
     comments = item.comment_set.all()
-    item_liked = item.like_set.filter(user=user)
+    item_liked = item.like_set.filter(user=user).exists()
     item_images = item.image_set.all()
     requested = user.traderequest_set.filter(item=item).first()
 
@@ -120,7 +120,7 @@ def item_detail(request, pk):
 
 
 @login_required
-@user_who_not_allowed_to_edit
+@user_who_not_allowed_to_edit_or_delete
 def edit_item(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
@@ -134,6 +134,16 @@ def edit_item(request, pk):
             return redirect('my_page', user.id)
     context = {'form': form, 'item_images': item_images}
     return render(request, 'cross_book/edit-item.html', context)
+
+
+@require_POST
+@login_required
+@user_who_not_allowed_to_edit_or_delete
+def delete_item(request, pk):
+    item = get_object_or_404(Item, pk)
+    item.delete()
+    messages.success(request, '商品を削除しました。')
+    return redirect('my_page', request.user.id)
 
 
 @require_GET

@@ -126,3 +126,28 @@
 .comment-sent_css:focus {
     outline: none;
 }
+
+.item-detail-page-content_only-item-owner {
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto;
+    width: 70%;
+}
+.item-detail-page-content_only-item-owner_edit {
+    text-align: center;
+    border: deepskyblue solid 1px;
+    border-radius: 30px;
+    color: deepskyblue;
+}
+
+.item-detail-page-content_only-item-owner_delete {
+    text-align: center;
+    border: indianred solid 1px;
+    border-radius: 30px;
+}
+
+.item-detail-page-content_only-item-owner_delete_button {
+    color: indianred;
+    border: none;
+    width: 100%;
+}

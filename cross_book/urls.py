@@ -11,6 +11,7 @@ urlpatterns = [
     path('search/', views.search_item, name="search_item"),
     path('item/<int:pk>/', views.item_detail, name="item_detail"),
     path('item/<int:pk>/edit/', views.edit_item, name="edit_item"),
+    path('item/<int:pk>/delete', views.delete_item, name="delete_item"),
     path('item/<int:pk>/trade-requests/', views.view_item_trade_requests, name="view_item_trade_requests"),
     path('item/<int:item_pk>/trade-requests/<int:trade_req_pk>/delete/',
          views.reject_trade_request, name="reject_trade_request"),
