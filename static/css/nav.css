@@ -51,7 +51,7 @@
 .navbar-user-icon-image {
     object-fit: contain;
     border-radius: 100%;
-    border: rgba(0, 0, 0, .3) solid 2px;
+    border: #ff9211 solid 1px;
 }
 
 

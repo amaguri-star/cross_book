@@ -162,7 +162,7 @@ def create_room(request):
 
 
 def get_chat_rooms(request):
-    rooms = Room.objects.filter(roommember__member=request.user).order_by('timestamp')
+    rooms = Room.objects.filter(roommember__member=request.user).order_by('-timestamp')
     other_room_member = []
     for room in rooms:
         other_member = RoomMember.objects.get(~Q(member=request.user), room=room.id)
@@ -181,12 +181,12 @@ def chat_room_list(request):
 def chat_room(request, room_pk):
     context = get_chat_rooms(request)
     room_messages = get_object_or_404(Room, pk=room_pk).room_messages.all().order_by('created_at')
-    other_member_username = request.POST.get('other_member_username')
+    other_member = RoomMember.objects.get(~Q(member=request.user), room_id=room_pk)
     context_new = {
         'room_pk': mark_safe(json.dumps(room_pk)),
         'username': mark_safe(json.dumps(request.user.username)),
         'room_messages': room_messages,
-        'other_user': other_member_username,
+        'other_member_username': other_member.member.username,
     }
     context.update(context_new)
     return render(request, 'cross_book/chat-room-list.html', context)

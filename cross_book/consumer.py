@@ -72,6 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 room=room,
                 message=event['message'],
             )
+            room.save()
         except Exception as e:
             raise
 
