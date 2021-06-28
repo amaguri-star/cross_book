@@ -140,6 +140,11 @@
     color: deepskyblue;
 }
 
+.item-detail-page-content_only-item-owner_edit a {
+    display: block;
+    width: 100%;
+}
+
 .item-detail-page-content_only-item-owner_delete {
     text-align: center;
     border: indianred solid 1px;

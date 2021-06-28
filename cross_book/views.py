@@ -151,8 +151,9 @@ def delete_item(request, pk):
 def category_page(request, pk):
     if pk == 0:
         return redirect('home')
-    items = Item.objects.filter(category=k)
-    context = {'items': items, 'category': ""}
+    category = get_object_or_404(Category, id=pk)
+    items = Item.objects.filter(category=category)
+    context = {'items': items, 'category': category.name}
     return render(request, 'cross_book/category-page.html', context)
 
 
