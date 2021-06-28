@@ -81,6 +81,7 @@ def sell_page(request):
         formset = image_form_set(request.POST, request.FILES, queryset=Image.objects.none())
         if form.is_valid() and formset.is_valid():
             item = form.save(commit=False)
+            print(type(item.category))
             item.user = request.user
             item.save()
             images = formset.save(commit=False)
@@ -148,11 +149,10 @@ def delete_item(request, pk):
 
 @require_GET
 def category_page(request, pk):
-    if pk == 1:
+    if pk == 0:
         return redirect('home')
-    category = get_object_or_404(Category, id=pk)
-    items = Item.objects.filter(category=category)
-    context = {'items': items, 'category': category}
+    items = Item.objects.filter(category=k)
+    context = {'items': items, 'category': ""}
     return render(request, 'cross_book/category-page.html', context)
 
 

@@ -29,6 +29,7 @@ class MyUserAdmin(UserAdmin):
 
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Address)
+admin.site.register(Category)
 admin.site.register(Item)
 admin.site.register(Image)
 admin.site.register(Like)
