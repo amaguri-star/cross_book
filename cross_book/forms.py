@@ -58,12 +58,9 @@ class CreateItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateItemForm, self).__init__(*args, **kwargs)
-        CHOICES = []
-        for choice in Category.objects.all():
-            CHOICES.append((choice.name, choice.name))
-        CHOICES = tuple(CHOICES)
-        self.fields['category'] = forms.ChoiceField(label="カテゴリ", choices=CHOICES, widget=forms.Select)
-        print(CHOICES)
+        choices = Category.objects.all().values_list('name', 'name')
+        self.fields['category'] = forms.ChoiceField(label="カテゴリ", choices=choices, widget=forms.Select)
+        print(choices)
 
 
 class EditItemForm(forms.ModelForm):
