@@ -75,10 +75,11 @@
             {% if user == item.user %}
                 <div class="item-detail-page-content_only-item-owner">
                     <div class="item-detail-page-content_only-item-owner_edit">
-                        <a href="{% url 'item_detail' item.id %}">編集</a>
+                        <a href="{% url 'edit_item' item.id %}">編集</a>
                     </div>
                     <p style="text-align:center;">or</p>
                     <form method="POST" class="item-detail-page-content_only-item-owner_delete" action="{% url 'delete_item' item.id %}">
+                        {% csrf_token %}
                         <button class="item-detail-page-content_only-item-owner_delete_button" type="submit">削除</button>
                     </form>
                 </div>
