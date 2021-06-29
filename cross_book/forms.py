@@ -47,7 +47,6 @@ class EditUserProfile(forms.ModelForm):
 
 
 class CreateItemForm(forms.ModelForm):
-
     class Meta:
         model = Item
         exclude = ['user', 'at_created']
@@ -67,3 +66,21 @@ class EditItemForm(forms.ModelForm):
     class Meta:
         model = Item
         exclude = ['user', 'at_created']
+
+    def __init__(self, *args, **kwargs):
+        super(EditItemForm, self).__init__(*args, **kwargs)
+        choices = Category.objects.all().values_list('name', 'name')
+        self.fields['category'] = forms.ChoiceField(label="カテゴリ", choices=choices, widget=forms.Select)
+
+
+ImageFormSet = forms.inlineformset_factory(
+    parent_model=Item,
+    model=Image,
+    fields=['image'],
+    extra=3,
+    max_num=3,
+    can_delete=False,
+    min_num=1,
+    validate_min=True,
+    labels=None,
+)

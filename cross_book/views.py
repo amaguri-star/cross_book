@@ -4,9 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
-from django import forms
 import json
-from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm
+from .forms import AddressForm, EditUserProfile, EditItemForm, CreateItemForm, ImageFormSet
 from .models import *
 from .decorators import *
 from .api.viewsets import *
@@ -51,7 +50,7 @@ def edit_user_profile(request, pk):
 @login_required
 def address_page(request):
     user = request.user
-    form = AddressForm(instance=request.user.address)
+    form = AddressForm(instance=user.address)
     if request.method == 'POST':
         form = AddressForm(request.POST, instance=user.address)
         if form.is_valid():
@@ -64,24 +63,11 @@ def address_page(request):
 
 @login_required
 def sell_page(request):
-    image_form_set = forms.inlineformset_factory(
-        parent_model=Item,
-        model=Image,
-        fields=['image'],
-        extra=3,
-        max_num=3,
-        can_delete=False,
-        min_num=1,
-        validate_min=True,
-        labels=None,
-    )
-
     if request.method == "POST":
         form = CreateItemForm(request.POST)
-        formset = image_form_set(request.POST, request.FILES, queryset=Image.objects.none())
+        formset = ImageFormSet(request.POST, request.FILES, queryset=Image.objects.none())
         if form.is_valid() and formset.is_valid():
             item = form.save(commit=False)
-            print(type(item.category))
             item.user = request.user
             item.save()
             images = formset.save(commit=False)
@@ -93,8 +79,8 @@ def sell_page(request):
         else:
             return render(request, 'cross_book/sell.html', {'form': form, 'formset': formset})
 
-    formset = image_form_set(queryset=Image.objects.none(), )
     form = CreateItemForm()
+    formset = ImageFormSet(queryset=Image.objects.none())
     context = {'form': form, 'formset': formset}
     return render(request, 'cross_book/sell.html', context)
 
@@ -125,15 +111,14 @@ def item_detail(request, pk):
 def edit_item(request, pk):
     user = request.user
     item = get_object_or_404(Item, pk=pk)
-    item_images = item.image_set.all()
-    form = EditItemForm(instance=item)
-    if request.method == 'POST':
-        form = EditItemForm(request.POST, request.FILES, instance=item)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "商品情報を編集しました。")
-            return redirect('my_page', user.id)
-    context = {'form': form, 'item_images': item_images}
+    form = EditItemForm(request.POST or None, instance=item)
+    formset = ImageFormSet(request.POST or None, request.FILES or None, instance=item)
+    context = {'form': form, 'formset': formset}
+    if request.method == 'POST' and form.is_valid() and form.is_valid():
+        form.save()
+        formset.save()
+        messages.success(request, "商品情報を編集しました。")
+        return redirect('my_page', user.id)
     return render(request, 'cross_book/edit-item.html', context)
 
 

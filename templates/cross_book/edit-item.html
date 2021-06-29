@@ -2,11 +2,16 @@
 {% load static %}
 {% block title %}商品編集ページ{% endblock %}
 {% block content %}
-    <form action="" method="POST">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for formset_field in formset %}
+            {{ formset_field.as_p }}
+        {% endfor %}
         <table>
             {{ form.as_table }}
         </table>
-    <button type="submit">編集完了</button>
+        <button type="submit">編集完了</button>
     </form>
 {% endblock %}
 {% block script %}
