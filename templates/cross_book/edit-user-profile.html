@@ -1,5 +1,6 @@
 {% extends 'shared/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}ユーザープロフィール編集{% endblock %}
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/edit-user-profile.css' %}">
@@ -13,7 +14,7 @@
         </div>
         <div class="edit-user-profile-form_field">
             <p>ユーザー名</p>
-            {{ form.username }}
+            {{ form.username|add_class:"edit-user-profile-form_field_username" }}
         </div>
         <div class="edit-user-profile-form_field">
             <p>プロフィール文</p>
