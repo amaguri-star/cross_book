@@ -126,7 +126,7 @@ def edit_item(request, pk):
 @login_required
 @user_who_not_allowed_to_edit_or_delete
 def delete_item(request, pk):
-    item = get_object_or_404(Item, pk)
+    item = get_object_or_404(Item, id=pk)
     item.delete()
     messages.success(request, '商品を削除しました。')
     return redirect('my_page', request.user.id)
@@ -138,8 +138,6 @@ def category_page(request, pk):
         return redirect('home')
     category = get_object_or_404(Category, id=pk)
     items = Item.objects.filter(category=category.name)
-    print(category.name)
-    print(items)
     context = {'items': items, 'category': category.name}
     return render(request, 'cross_book/category-page.html', context)
 
