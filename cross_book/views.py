@@ -77,6 +77,7 @@ def sell_page(request):
             messages.success(request, '商品を出品しました。')
             return redirect('my_page', request.user.id)
         else:
+            messages.error(request, '出品失敗しました。')
             return render(request, 'cross_book/sell.html', {'form': form, 'formset': formset})
 
     form = CreateItemForm()
