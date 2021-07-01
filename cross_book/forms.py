@@ -53,13 +53,14 @@ class CreateItemForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': '', 'placeholder': '商品名を記入してください(必須)'}),
             'explanation': forms.Textarea(attrs={'class': '', 'placeholder': '商品の説明(必須)'}),
+            'category': forms.Select(choices=Category.objects.all()),
         }
 
-    def __init__(self, *args, **kwargs):
-        super(CreateItemForm, self).__init__(*args, **kwargs)
-        choices = Category.objects.all().values_list('name', 'name')
-        self.fields['category'] = forms.ChoiceField(label="カテゴリ", choices=choices, widget=forms.Select)
-        print(choices)
+    # def __init__(self, *args, **kwargs):
+    #     super(CreateItemForm, self).__init__(*args, **kwargs)
+    #     choices = Category.objects.all().values_list('name', 'name')
+    #     self.fields['category'] = forms.ChoiceField(label="カテゴリ", choices=choices, widget=forms.Select)
+    #     print(choices)
 
 
 class EditItemForm(forms.ModelForm):
