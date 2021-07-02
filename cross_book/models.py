@@ -178,19 +178,11 @@ class Item(models.Model):
             )
         return value
 
-    def validate_category(value):
-        if value == "選択してください":
-            raise ValidationError(
-                _("選択してください"),
-                params={'value': value}
-            )
-        return value
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="商品名", max_length=30)
     explanation = models.TextField(verbose_name="出品者からの一言", max_length=3000, blank=True)
     state = models.IntegerField(verbose_name="商品の状態", choices=STATE, default=STATE[0][0], validators=[validate_choice])
-    category = models.CharField(verbose_name="カテゴリ", max_length=255, default="選択してください", validators=[validate_category])
+    category = models.ForeignKey("Category", default="選択してください", verbose_name="カテゴリ", validators=[validate_choice], on_delete=models.DO_NOTHING)
     shipping_area = models.IntegerField(verbose_name="発送元の地域", choices=LOCATION, default=LOCATION[0][0],
                                         validators=[validate_choice])
     shipping_day = models.IntegerField(verbose_name="発送までの日数", choices=DAYS, default=DAYS[0][0],

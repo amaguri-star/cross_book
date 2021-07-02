@@ -138,8 +138,8 @@ def category_page(request, pk):
     if pk == 0:
         return redirect('home')
     category = get_object_or_404(Category, id=pk)
-    items = Item.objects.filter(category=category.name)
-    context = {'items': items, 'category': category.name}
+    items = Item.objects.filter(category=category.id)
+    context = {'items': items}
     return render(request, 'cross_book/category-page.html', context)
 
 
