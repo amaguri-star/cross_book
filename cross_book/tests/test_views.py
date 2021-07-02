@@ -21,25 +21,40 @@ class LoggedInTestCase(TestCase):
             email=self.test_user.email,
             password=self.password,
         )
+        category_list = [
+            '選択してください',
+            '文学・エッセイ',
+            'ビジネス・経済',
+            '漫画ラノベ',
+            '趣味・実用',
+            '学門・資格・教育',
+            '絵本・児童書',
+            'エンタメ',
+            '雑誌・ムック',
+            'その他',
+        ]
+        for idx in range(len(category_list)):
+            Category.objects.create(id=idx, name=category_list[idx])
 
 
-# def get_temporary_image():
+def get_temporary_image():
+    im = Image.new(mode='RGB', size=(200, 200))
+    im_io = BytesIO()
+    im.save(im_io, 'JPEG')
+    im_io.seek(0)
+    value = InMemoryUploadedFile(im_io, None, 'random-name.jpg', 'image/jpeg', None, None)
+    return value
 
 
 class TestItemCreateView(LoggedInTestCase):
 
     def test_create_item_success(self):
-        im = Image.new(mode='RGB', size=(200, 200))
-        im_io = BytesIO()
-        im.save(im_io, 'JPEG')
-        im_io.seek(0)
-
         params = {
             'image_set-TOTAL_FORMS': '3',
             'image_set-INITIAL_FORMS': '0',
             'image_set-MIN_NUM_FORMS': '1',
             'image_set-MAX_NUM_FORMS': '3',
-            'image_set-0-image': InMemoryUploadedFile(im_io, None, 'random-name.jpg', 'image/jpeg', None, None),
+            'image_set-0-image': get_temporary_image(),
             'image_set-0-id': '',
             'image_set-0-item': '',
             'image_set-1-image': '',
@@ -51,12 +66,11 @@ class TestItemCreateView(LoggedInTestCase):
             'name': 'テストネーム',
             'explanation': 'これはテスト用の説明です。',
             'state': '1',
-            'category': '0',
+            'category': '1',
             'shipping_area': '1',
             'shipping_day': '1',
         }
-        response = self.client.post(reverse_lazy('sell'), data=params)
-        print(response.context['form'].errors)
+        response = self.client.post(reverse_lazy('sell'), data=params, follow=True)
         self.assertRedirects(response, expected_url='/mypage/{}/'.format(self.test_user.id))
         self.assertEqual(Item.objects.filter(name="テストネーム").count(), 1)
 
@@ -71,7 +85,7 @@ class TestItemCreateView(LoggedInTestCase):
             'image_set-INITIAL_FORMS': '0',
             'image_set-MIN_NUM_FORMS': '1',
             'image_set-MAX_NUM_FORMS': '3',
-            'image_set-0-image': InMemoryUploadedFile(im_io, None, 'random-name.jpg', 'image/jpeg', None, None),
+            'image_set-0-image': get_temporary_image(),
             'image_set-0-id': '',
             'image_set-0-item': '',
             'image_set-1-image': '',
@@ -83,9 +97,10 @@ class TestItemCreateView(LoggedInTestCase):
             'name': 'テストネーム',
             'explanation': 'これはテスト用の説明です。',
             'state': '0',
-            'category': "1",
+            'category': "0",
             'shipping_area': '1',
             'shipping_day': '1',
         }
-        response = self.client.post(reverse('sell'), data=params)
-        self.assertFormError(response, 'form', 'state', '選択してください')
+        response = self.client.post(reverse_lazy('sell'), data=params, follow=True)
+        self.assertFormError(response, 'form', field='state', errors='選択してください')
+        self.assertFormError(response, 'form', field='category', errors='選択してください')
