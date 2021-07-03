@@ -63,7 +63,6 @@ class EditItemForm(forms.ModelForm):
         exclude = ['user', 'at_created']
 
 
-
 ImageFormSet = forms.inlineformset_factory(
     parent_model=Item,
     model=Image,
