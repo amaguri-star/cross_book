@@ -162,3 +162,6 @@ MESSAGE_TAGS = {
     messages.INFO: 'alert alert-info'
 }
 
+BACKUP_PATH = 'backup/'
+NUM_SAVED_BACKUP = 30
+
