@@ -110,7 +110,6 @@ def item_detail(request, pk):
 @login_required
 @user_who_not_allowed_to_edit_or_delete
 def edit_item(request, pk):
-    user = request.user
     item = get_object_or_404(Item, pk=pk)
     form = EditItemForm(request.POST or None, instance=item)
     formset = ImageFormSet(request.POST or None, request.FILES or None, instance=item)
@@ -119,7 +118,7 @@ def edit_item(request, pk):
         form.save()
         formset.save()
         messages.success(request, "商品情報を編集しました。")
-        return redirect('my_page', user.id)
+        return redirect('item_detail', item.id)
     return render(request, 'cross_book/edit-item.html', context)
 
 
