@@ -1,0 +1,31 @@
+.edit-user-profile-form {
+    width: 500px;
+    margin: 50px auto;
+}
+
+.edit-user-profile-form_field {
+    margin-top: 20px;
+}
+
+.edit-user-profile-form_submit {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    border-radius: 20px;
+    border: #ff9211 solid 2px;
+    color: #ff9211;
+}
+
+.edit-user-profile-form_field_username {
+    border: #777 solid 2px;
+    border-radius: 20px;
+    padding: 2px 10px;
+}
+
+textarea {
+    width: 100%;
+    border: #777 solid 2px;
+    border-radius: 20px;
+    padding: 2px 10px;
+}
