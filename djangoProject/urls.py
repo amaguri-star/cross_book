@@ -5,8 +5,9 @@ from django.conf.urls.static import static
 from . import settings_common, settings_dev
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('cross_book.urls')),
+    # path('admin/', admin.site.urls),
+    path('control/', admin.site.urls),
+    path('/', include('cross_book.urls')),
     path('api/', include('cross_book.api.urls')),
     path('accounts/', include('allauth.urls')),
 ]
