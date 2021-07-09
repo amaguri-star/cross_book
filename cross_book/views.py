@@ -267,7 +267,7 @@ def search_item(request):
     item_list = Item.objects.filter(
         Q(name__icontains=q_word) |
         Q(explanation__icontains=q_word) |
-        Q(category__icontains=q_word))
+        Q(category__name__icontains=q_word))
     context = {
         'item_list': item_list,
         'item_count': item_list.count(),
