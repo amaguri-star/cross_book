@@ -182,7 +182,7 @@ def chat_room(request, room_pk):
         'room_pk': mark_safe(json.dumps(room_pk)),
         'username': mark_safe(json.dumps(request.user.username)),
         'room_messages': room_messages,
-        'other_member_username': other_member.member.username,
+        'other_member': other_member.member,
     }
     context.update(context_new)
     return render(request, 'cross_book/chat-room-list.html', context)

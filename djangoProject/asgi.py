@@ -1,11 +1,16 @@
 import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings_dev')
+
+import django
+django.setup()
 
 from channels.auth import AuthMiddlewareStack
+import channels.layers
 from channels.routing import ProtocolTypeRouter, URLRouter
-from django.core.asgi import get_asgi_application
 import cross_book.routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoProject.settings')
+channel_layer = channels.layers.get_channel_layer()
+from channels.auth import AuthMiddlewareStack
 
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(

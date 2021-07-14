@@ -47,14 +47,13 @@
     <script>
         let room_pk = {{ room_pk }};
         let username = {{ username }};
-
-        const socket = new WebSocket(
-            'wss://'
-            + window.location.host
-            + '/ws/chat/'
-            + room_pk
-            + '/'
-        )
+        let ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        {% if debug %}
+            let ws_path = ws_scheme + '://' + window.location.host + '/ws/chat/' + room_pk + '/'
+        {% else %}
+            let ws_path = ws_scheme + '://' + window.location.host + ':8001/ws/chat/' + room_pk + '/'
+        {% endif %}
+        const socket = new WebSocket(ws_path)
 
         document.querySelector('#message-sent').onclick = function sendMessage() {
             const messageTextAreaDom = document.querySelector('#send-message-input-area');
@@ -93,7 +92,8 @@
             if (author === username) {
                 msgListTag.className = 'message-row sent';
             } else {
-                imgTag.src = "{{ other_user.image.url }}";
+                imgTag.src = "{{ other_member.image.url }}";
+                console.log(imgTag.src)
                 content_divTag.appendChild(imgTag);
                 msgListTag.className = 'message-row replies';
             }

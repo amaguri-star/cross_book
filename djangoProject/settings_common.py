@@ -8,6 +8,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 AUTH_USER_MODEL = 'cross_book.User'
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '192.168.1.23',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,8 +26,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'cross_book.apps.CrossBookConfig',
+    'asgiref',
     'channels',
-    'channels_redis',
     'bootstrap4',
     'widget_tweaks',
     'django_boost',
@@ -73,7 +78,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)]
+            "hosts": [('localhost', 6379)]
         }
     }
 }
@@ -155,7 +160,6 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
 # ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
 
-
 MESSAGE_TAGS = {
     messages.ERROR: 'alert alert-danger',
     messages.WARNING: 'alert alert-warning',
@@ -165,4 +169,3 @@ MESSAGE_TAGS = {
 
 BACKUP_PATH = 'backup/'
 NUM_SAVED_BACKUP = 30
-
